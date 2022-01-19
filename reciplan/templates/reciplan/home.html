@@ -1,0 +1,7 @@
+
+{% extends 'reciplan/base.html'%}
+{% block content %}
+{% for recipe in recipes %}
+<li>{{recipe.title}}</li>
+{% endfor %}
+{% endblock%}
