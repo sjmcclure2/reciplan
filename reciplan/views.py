@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Recipe
 
 def index(request):
-    return HttpResponse("Hello World, this is the reciplan base!")
+    recipes = Recipe.objects.all()
+    return render(request, 'reciplan/home.html', {'recipes':recipes})
