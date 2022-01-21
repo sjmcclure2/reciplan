@@ -1,6 +1,17 @@
+<!--base page that displays the navbar-->
+<!--Bootstrap CDN links-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+<!--Custom inline CSS-->
+<style>
+    label, input {
+        display: block;
+    }
+    span.helptext {
+        display: none;
+    }
+</style>
+<!--Main nav bar start-->
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
@@ -66,6 +77,33 @@
                     </li>
                 </ul>
                 <hr>
+<!--Main nav bar end-->
+<!--Salutation menu start-->
+                <div class="dropdown pb-4">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-none d-sm-inline mx-1">Hello, {{ user.username|default:'Guest' }}!</span>
+                    </a>
+                    <!--Dynamic Content based on user login status-->
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <!--Add items for a user who is logged in such as logout/change password-->
+                        {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'logout'%}">Sign out</a></li>
+                        <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
+                        <li><a class="dropdown-item" href="{% url 'password_reset' %}">Reset password</a></li>
+                        {% else %}
+                        <!--Add items for a user not logged in such as create account or reset password with email-->
+                        <li><a class="dropdown-item" href="{% url 'login'%}">Sign in</a></li>
+                        <!--Check functionality of password reset after pull to server.
+                            Now emails are coming with the localhost:8080 for local DEV server.
+                            Once uploaded it should dynamically change to display the URI for the site.
+                        -->
+                        <li><a class="dropdown-item" href="{% url 'password_reset' %}">Reset password</a></li>
+                        <li><a class="dropdown-item" href="{% url 'register' %}">Register New Account</a></li>
+
+                        {% endif %}
+                    </ul>
+                </div>
+<!--Salutation menu end-->
             </div>
         </div>
         <div class="col py-3">

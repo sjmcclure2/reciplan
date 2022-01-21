@@ -1,0 +1,22 @@
+<!--users/templates/users/register.html-->
+
+{% extends 'reciplan/base.html' %}
+
+{% block content %}
+<!--Registration form with error display based on session cookies-->
+<h2>Register</h2>
+<!--If errors exist print list at top of screen-->
+<ul>
+    {% if form_errors%}
+        {%for i in form_errors%}
+        <li>{{i}}</li>
+        {%endfor%}
+    {%endif%}
+</ul>
+<!--Stock Django registration form displayed-->
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value="Register">
+</form>
+{% endblock %}
