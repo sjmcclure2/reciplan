@@ -31,13 +31,15 @@ ALLOWED_HOSTS = ['reciplan.site','www.reciplan.site','159.223.171.170','localhos
 # Application definition
 
 INSTALLED_APPS = [
+    #place custom apps first to make sure the admin pages are overridden
+    'reciplan',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reciplan',
+    
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#change the login and logout redirect pages
+LOGIN_REDIRECT_URL = "authorized"
+LOGOUT_REDIRECT_URL = "/"
+
+#SMTP Config for reciplanpasschange@gmail.com
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'reciplanpasschange@gmail.com'
+EMAIL_HOST_PASSWORD = 'DevelopersF@ncyP@$$W0rd123!@#'

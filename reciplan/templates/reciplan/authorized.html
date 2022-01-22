@@ -1,0 +1,11 @@
+<!--template for a page that is authorized user-->
+{% extends 'reciplan/base.html'%}
+{% block content %}
+
+<h1>Welcome {{ user.username|default:'Guest'}}</h1>
+<h2>Here are the current recipes in the database</h2>
+{% for recipe in recipes %}
+<li>{{recipe.title}}</li>
+{% endfor %}
+
+{% endblock%}
