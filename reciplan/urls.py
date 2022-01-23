@@ -10,4 +10,5 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("search/", views.search, name="search"),
     path("recipe/(?<name>\*)", views.detail, name="detail"),
+    path("reciplan/home", views.home, name='home')
 ]

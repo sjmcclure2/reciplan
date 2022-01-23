@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<!--Salutation that will show guest if no logged in user-->
 <h1>Welcome {{ user.username|default:'Guest'}}</h1>
 
 <form action="{% url 'search' %}" method="POST">
@@ -22,7 +23,7 @@
                 <div class="card-body">
                   <h5 class="card-title">{{result.title}}</h5>
                   <p class="card-text">{{result.description}}</p>
-                  <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View Full Recipe</a>
+                  <a href="{% url 'detail' name=result.title %}" class="btn btn-primary">View Full Recipe</a>
                 </div>
               </div>
         {% endfor %}
@@ -43,6 +44,7 @@
         {% endfor %}
     {%endif%}
 {% else %}
+<!--this will display five choices from the DB just to put something on the page for the user to look at-->
     <h2>Here are five of the current recipes in the database</h2>
     {% for recipe in recipes %}
     <div class="card" style="width: 18rem;">

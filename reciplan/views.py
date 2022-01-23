@@ -7,13 +7,16 @@ from reciplan.forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 
 def index(request):
-    return render(request, 'reciplan/home.html')
+    #redirect user to login page as first page of the site
+    return redirect(reverse('login'))
+
+def home(request):
+    return render(request, "reciplan/home.html")
 
 @login_required
 def create_recipe(request):
-    #sample of a view that requires login based on the decorator
-    #sample database call for all recipes passed
-    #in the render request to the template
+    #send authenticated user to the create recipe page
+    #sedn unauthenticated/guest user to login page
     if request.method == 'GET':
         return render(request, 'reciplan/create_recipe.html')
 
