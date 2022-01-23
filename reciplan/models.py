@@ -10,7 +10,7 @@ class Recipe(models.Model):
 
 
 class Ingredients(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     amt = models.IntegerField()
     unit_of_measure = models.CharField(max_length=10)
