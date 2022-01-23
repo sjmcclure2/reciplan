@@ -15,3 +15,4 @@ class Ingredients(models.Model):
     amt = models.IntegerField()
     unit_of_measure = models.CharField(max_length=10)
     in_cart = models.BooleanField(default=False)
+

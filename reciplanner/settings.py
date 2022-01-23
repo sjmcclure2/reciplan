@@ -80,7 +80,9 @@ WSGI_APPLICATION = 'reciplanner.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '..', 'db.sqlite3'),
+
+        'NAME': os.path.join(BASE_DIR, '..', 'db.sqlite3')
+
     }
 }
 
@@ -130,7 +132,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #change the login and logout redirect pages
-LOGIN_REDIRECT_URL = "authorized"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "/"
 
 #SMTP Config for reciplanpasschange@gmail.com

@@ -1,5 +1,6 @@
-<!--login page with form-->
-{% extends 'reciplan/base.html' %}
+<!--login page with form This is the new index page for the site.-->
+<!--Remove the base html for the sidebar-->
+<!--{% extends 'reciplan/base.html' %}-->
 
 {% block content %}
 <h2>Login</h2>
@@ -9,5 +10,8 @@
     {{ form.as_p }}
     <input type="submit" value="Login">
 </form>
+<!--URL to register new account-->
+<a class="dropdown-item" href="{% url 'register' %}">Register New Account</a>
+<a class="dropdown-item" href="{% url 'home' %}">Continue as Guest</a>
 
 {% endblock %}

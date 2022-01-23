@@ -1,0 +1,12 @@
+{% extends 'reciplan/base.html'%}
+{% block content %}
+<h1>This page will be where the calculations are done</h1>
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{recipe.title}}</h5>
+      <p class="card-text">{{recipe.description}}</p>
+      <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View Full Recipe</a>
+    </div>
+  </div>
+{% endblock %}
