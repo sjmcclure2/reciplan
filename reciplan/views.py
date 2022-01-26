@@ -73,46 +73,46 @@ def detail(request, name):
     results = Recipe.objects.get(title=name)
     return render(request, 'reciplan/recipe_view.html', {'recipe':results})
 
-# Takes in the amount of cups and converts to an appropriate DRY unit based on amount
+# Helper function for update_yield() function
 def update_d_units(cup_amt): 
-        # If the amount is 1/4 cup or more, maintain measurement in cups
+    # If the amount is 1/4 cup or more, maintain measurement in cups
     if cup_amt >= (1/4):
         unit = 'cup'
         return cup_amt, unit
-        # If the amount is less than 1/4 cup but more than 1/8 cup, convert to tbsp
+    # If the amount is less than 1/4 cup but more than 1/8 cup, convert to tbsp
     elif cup_amt < (1/4) and cup_amt >= (1/8):
         unit = 'tbsp'
         return 16 * cup_amt, unit
-        # If the amount is less than 1/8 cup, convert to tsp
+    # If the amount is less than 1/8 cup, convert to tsp
     else:
         unit = 'tsp'
         return 48 * cup_amt, unit
 
-    # Takes in the amount of cups and converts to an appropriate LIQUID unit based on amount
+# Helper function for update_yield() function
 def update_l_units(cup_amt):
-        # If the amt is less than 1 cup, convert to fl oz
+    # If the amt is less than 1 cup, convert to fl oz
     if cup_amt < 1:
         unit = "fl oz"
         return 8 * cup_amt, unit
-        # If the amt is between 1 and 4 cups, maintain measurement in cups
+    # If the amt is between 1 and 4 cups, maintain measurement in cups
     elif cup_amt >= 1 and cup_amt <= 4:
         unit = 'cup'
         return cup_amt, unit
-        # if the amt is more than 3 but no more than 8, convert to pints
+    # if the amt is more than 3 but no more than 8, convert to pints
     elif cup_amt > 5 and cup_amt < 8:
         unit = 'pint'
         return (1/2) * cup_amt, unit
-        # If the amt is more than 3 but no more than 15, convert to quarts
+    # If the amt is more than 3 but no more than 15, convert to quarts
     elif cup_amt >= 8 and cup_amt < 16:
         unit = 'quart'
         return (1/4) * cup_amt, unit
-        # if the amt is more than 16 cups, convert to gallons
+    # if the amt is more than 16 cups, convert to gallons
     else:
         unit = 'gallon'
         return (1/16) * cup_amt, unit
-    
+
+# This is the only function that needs to be called to adjust ingredient amounts
 def update_yield(o_yield, t_yield, unit, amt):
-        # Converts the original yield ingredient amount into the target yield amount
     adj_amt = (amt/o_yield) * t_yield
 
     if unit == "fl oz":
