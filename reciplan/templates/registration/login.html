@@ -45,7 +45,8 @@
     </form>
     <!--URL to register new account-->
     <a id="unauth" class="dropdown-item" href="{% url 'register' %}">Register New Account</a>
-    <a id="unauth" class="dropdown-item" href="{% url 'home' %}">Continue as Guest</a>
+    <!--Authentication status added to continue button-->
+    <a id="unauth" class="dropdown-item" href="{% url 'home' %}">Continue as {{user.username|default:"Guest"}}</a>
 </div>
 
 {% endblock %}
