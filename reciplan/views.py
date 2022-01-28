@@ -77,7 +77,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(reverse("authorized"))
+            return redirect(reverse("home"))
         else:
         #if user form fails redirect to new register with errors displayed
             request.session['errors'] = form_errors
@@ -110,7 +110,8 @@ def detail(request, name):
         targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure')
         for i in targs:
             if i['name']=='Flour':
-                i['amt'] += 1          
+                i['amt'] += 1
+
 
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
                                                                 'ingredients':ingredients, \
