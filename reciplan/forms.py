@@ -6,6 +6,7 @@ from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
 from .custom_layout_object import *
+from django import forms
 
 class CustomUserCreationForm(UserCreationForm):
     #check for email used more than once
