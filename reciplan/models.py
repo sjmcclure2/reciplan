@@ -1,6 +1,5 @@
 from django.db import models
-from django.http import cookie
-from conversions import to_cups
+from conversions import Convert
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
@@ -27,6 +26,6 @@ class Ingredients(models.Model):
         ('ea', 'ea')
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
-    cup_amt = to_cups(Recipe.__getattribute__o_yield, unit_of_measure, amt)
+    cup_amt = Convert.to_cups(Recipe.__getattribute__o_yield, unit_of_measure, amt)
     
   
