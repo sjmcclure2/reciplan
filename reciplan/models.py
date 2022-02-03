@@ -23,6 +23,12 @@ class Ingredients(models.Model):
         ('gallons', 'gallons'), 
         ('tsp', 'tsp'), 
         ('Tbsp', 'Tbsp'),
+        ('grams', 'grams'),
+        ('Kg', 'Kg'),
+        ('oz', 'oz'),
+        ('lbs', 'lbs'),
+        ('mL', 'mL'),
+        ('liter', 'liter'),
         ('ea', 'ea')
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
