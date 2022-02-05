@@ -9,7 +9,6 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to="reciplan/images/", blank=True)
     url = models.URLField(blank=True)
 
-
 class Ingredients(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length = 50)

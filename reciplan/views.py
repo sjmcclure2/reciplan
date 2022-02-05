@@ -1,10 +1,15 @@
 from distutils import errors
+from sre_constants import IN
 from django.shortcuts import render, redirect
-from .models import Recipe
+from .models import Recipe, Ingredients
 from django.contrib.auth import login
 from django.urls import reverse
-from reciplan.forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from .forms import *
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from django.forms.models import model_to_dict
 
 def index(request):
     #redirect user to login page as first page of the site
@@ -13,12 +18,36 @@ def index(request):
 def home(request):
     return render(request, "reciplan/home.html")
 
-@login_required
-def create_recipe(request):
-    #send authenticated user to the create recipe page
-    #sedn unauthenticated/guest user to login page
-    if request.method == 'GET':
-        return render(request, 'reciplan/create_recipe.html')
+class RecipeCreate(CreateView):
+    model = Recipe
+    template_name = 'reciplan/create_recipe.html'
+    form_class = RecipeForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(RecipeCreate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['Ingredients'] = IngredientsFormSet(self.request.POST)
+        else:
+            data['Ingredients'] = IngredientsFormSet()
+        return data
+
+    def form_valid(self, form):
+        print('in valid')
+        context = self.get_context_data()
+        ingredients = context['Ingredients']
+        with transaction.atomic():
+            self.object = form.save()
+            if ingredients.is_valid():
+                ingredients.instance = self.object
+                ingredients.save()
+        return super(RecipeCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('detail', kwargs={'name':self.object.title})
+    
+
+
 
 #Registration function
 def register(request):
@@ -48,7 +77,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(reverse("authorized"))
+            return redirect(reverse("home"))
         else:
         #if user form fails redirect to new register with errors displayed
             request.session['errors'] = form_errors
@@ -71,4 +100,20 @@ def search(request):
 
 def detail(request, name):
     results = Recipe.objects.get(title=name)
-    return render(request, 'reciplan/recipe_view.html', {'recipe':results})
+    ingredients = Ingredients.objects.filter(recipe = results)
+    if request.method == 'GET':
+        return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
+                                                                'ingredients':ingredients, \
+                                                                    'yield': results.o_yield, \
+                                                                        'targs':ingredients})
+    else:
+        targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure')
+        for i in targs:
+            if i['name']=='Flour':
+                i['amt'] += 1
+
+
+        return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
+                                                                'ingredients':ingredients, \
+                                                                    'yield': results.o_yield, \
+                                                                        'targs':targs})
