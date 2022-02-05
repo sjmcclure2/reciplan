@@ -28,10 +28,10 @@ class Ingredients(models.Model):
         ('oz', 'oz'),
         ('lbs', 'lbs'),
         ('mL', 'mL'),
-        ('liter', 'liter'),
+        ('liters', 'liters'),
         ('ea', 'ea')
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
-    cup_amt = Convert.to_cups(Recipe.__getattribute__o_yield, unit_of_measure, amt)
+    cup_amt = models.FloatField(blank=True)
     
   
