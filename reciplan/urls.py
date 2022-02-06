@@ -9,6 +9,6 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("register/", views.register, name="register"),
     path("search/", views.search, name="search"),
-    path("recipe/(?<name>\*)", views.detail, name="detail"),
+    path("recipe/(?<id>\*)", views.detail, name="detail"),
     path("reciplan/home", views.home, name='home'),
 ]
