@@ -10,6 +10,7 @@ from .forms import *
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.forms.models import model_to_dict
+from . import conversions
 
 def index(request):
     #redirect user to login page as first page of the site
@@ -33,18 +34,23 @@ class RecipeCreate(CreateView):
         return data
 
     def form_valid(self, form):
-        print('in valid')
+        #print('in valid')
         context = self.get_context_data()
         ingredients = context['Ingredients']
         with transaction.atomic():
             self.object = form.save()
             if ingredients.is_valid():
                 ingredients.instance = self.object
-                ingredients.save()
+                new_ingredient = ingredients.save(commit=False)
+                for i in new_ingredient:
+                    i.cup_amt = \
+                        conversions.Convert.to_cups(self.object.o_yield, \
+                            i.unit_of_measure, i.amt)
+                    i.save()
         return super(RecipeCreate, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('detail', kwargs={'name':self.object.title})
+        return reverse_lazy('detail', kwargs={'id':self.object.id})
     
 
 
@@ -98,8 +104,8 @@ def search(request):
     #these might look good as bootstrap cards, currently limited to 5 recipes but can increase
     return render(request, 'reciplan/search.html', {'recipes':recipes})
 
-def detail(request, name):
-    results = Recipe.objects.get(title=name)
+def detail(request, id):
+    results = Recipe.objects.get(id=id)
     ingredients = Ingredients.objects.filter(recipe = results)
     if request.method == 'GET':
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \

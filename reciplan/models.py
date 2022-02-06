@@ -1,5 +1,5 @@
 from django.db import models
-from conversions import Convert
+from . import conversions
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
@@ -31,6 +31,6 @@ class Ingredients(models.Model):
         ('ea', 'ea')
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
-    cup_amt = models.FloatField(blank=True)
+    cup_amt = models.FloatField(null=True)
     
   
