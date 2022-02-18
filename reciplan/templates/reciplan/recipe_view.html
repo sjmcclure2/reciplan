@@ -1,12 +1,48 @@
 {% extends 'reciplan/base.html'%}
 {% block content %}
-<h1>This page will be where the calculations are done</h1>
-<div class="card" style="width: 18rem;">
+<h1>{{ recipe.title }}</h1>
+
+<table>
+  <tr>
+    <th>Org<br>Amt</th>
+    <th>Tgt<br>Amt</th>
+    <th>UOM</th>
+    <th>Ingredient</th>
+  </tr>
+  {% for ingredient in ingredients %}
+  <tr>
+    <td>{{ ingredient.amt }}</td>
+    <td>{{ ingredient.amt }}</td>
+    <td>{{ ingredient.unit_of_measure }}</td>
+    <td>{{ ingredient.name }}</td>
+  </tr>
+  {% endfor %}
+  {% for targ in targs %}
+  <tr>
+    <td>{{ targ.amt }}</td>
+    <td>{{ targ.amt }}</td>
+    <td>{{ targ.unit_of_measure }}</td>
+    <td>{{ targ.name }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<form method="POST">{% csrf_token %}<button type='submit'>button</button></form>
+
+<!-- <div class="card" style="width: 18rem;">
     <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
     <div class="card-body">
       <h5 class="card-title">{{recipe.title}}</h5>
       <p class="card-text">{{recipe.description}}</p>
-      <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View Full Recipe</a>
+      <ul>
+
+        {% for ingredient in ingredients %}
+        <li>{{ ingredient.name }} {{ ingredient.amt }} {{ ingredient.unit_of_measure }}</li>
+        {% endfor %}
+      </ul>
+      {% for ingredient in ingredients %}
+
+
+      {% endfor %}
     </div>
-  </div>
+  </div> -->
 {% endblock %}

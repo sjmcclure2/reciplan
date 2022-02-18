@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['reciplan.site','www.reciplan.site','159.223.171.170','localhos
 
 INSTALLED_APPS = [
     #place custom apps first to make sure the admin pages are overridden
+    'crispy_forms',
     'reciplan',
     'django.contrib.admin',
     'django.contrib.auth',

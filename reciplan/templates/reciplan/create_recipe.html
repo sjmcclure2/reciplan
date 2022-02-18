@@ -1,7 +1,50 @@
 {% extends 'reciplan/base.html'%}
 {% block content %}
+<h1>{{ recipe.title }}</h1>
 
-<h1>This is where we will create recipes.</h1>
-<h1>Placeholder while I decide on how to build the form.</h1>
+<table>
+  <tr>
+    <th>Org<br>Amt</th>
+    <th>UOM</th>
+    <th>Ingredient</th>
+    <th>Add to Shopping List</th>
+  </tr>
+  
+  {% for targ in targs %}
+  <tr>
+    <td>{{ targ.amt }}</td>
+    <td>{{ targ.unit_of_measure }}</td>
+    </tr>
+  {% endfor %}
+
+  {% for ingredient in ingredients %}
+  <tr>
+    <td>{{ ingredient.amt }}</td>
+    <td>{{ ingredient.unit_of_measure }}</td>
+    <td>{{ ingredient.name }}</td>
+    <td> <input method="POST" type="checkbox" name="is_checked"></td> <!--This feeds into cart.views -->
+  </tr>
+    {% endfor %}
+
+  
+  <tr>{{ recipe.description }} </tr>
+</table>
+<table>
+  <tr>
+    <td> {{ recipe.directions }} </td>
+  </tr>
+</table>
+
+<form method="POST">
+  {% csrf_token %}
+  <label for="convert_yield">Adjust yield:</label>
+  <input type="number" id="convert_yield" name="convert_y" min="1" max="9999" value="1">
+  <input type="radio" id="metric" name ="unit_conv" value="Metric">
+  <label for="imperial">Metric</label><br>
+  <input type="radio" id="imperial" name="unit_conv" value="Imperial" checked> 
+  <label for="imperial">Imperial</label><br>
+  <button type='submit'>Apply</button> 
+</form> 
 
 {% endblock %}
+

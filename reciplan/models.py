@@ -1,5 +1,5 @@
 from django.db import models
-from conversions import Convert
+from . import conversions
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
@@ -9,14 +9,13 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to="reciplan/images/", blank=True)
     url = models.URLField(blank=True)
 
-
 class Ingredients(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length = 50)
-    amt = models.IntegerField()
+    amt = models.FloatField()
     UOM = (
-        ('fl_oz', 'fl oz'),
-        ('fl_cups', 'fl cups'),
+        ('fl_oz', 'fl_oz'),
+        ('fl_cups', 'fl_cups'),
         ('cups', 'cups'),
         ('pints', 'pints'),
         ('quarts', 'quarts'), 
@@ -32,6 +31,6 @@ class Ingredients(models.Model):
         ('ea', 'ea')
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
-    cup_amt = models.FloatField(blank=True)
+    cup_amt = models.FloatField(null=True)
     
   
