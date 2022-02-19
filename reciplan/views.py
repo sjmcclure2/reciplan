@@ -53,8 +53,6 @@ class RecipeCreate(CreateView):
         return reverse_lazy('detail', kwargs={'id':self.object.id})
     
 
-
-
 #Registration function
 def register(request):
     #render form if request is GET
@@ -104,22 +102,54 @@ def search(request):
     #these might look good as bootstrap cards, currently limited to 5 recipes but can increase
     return render(request, 'reciplan/search.html', {'recipes':recipes})
 
+
 def detail(request, id):
+
     results = Recipe.objects.get(id=id)
     ingredients = Ingredients.objects.filter(recipe = results)
+
+    # Shows the recipe requested by the search method
     if request.method == 'GET':
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
                                                                 'ingredients':ingredients, \
                                                                     'yield': results.o_yield, \
-                                                                        'targs':ingredients})
-    else:
-        targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure')
+                                                                        'targs':ingredients})    
+    else: 
+        targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure', 'cup_amt')
+
         for i in targs:
-            if i['name']=='Flour':
-                i['amt'] += 1
+            # If the user wants to see metric measurements, this will convert the updated yield
+            # amount into metric
+            if request.POST['unit_conv'] == 'Metric':
+                for i in targs:
+                    converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
+                    i['amt'] = converted[0]
+                    i['unit_of_measure'] = converted[1]
+                    metric = conversions.Convert.metric_imperial(converted[0], converted[1])
+                    i['amt'] = metric[0]
+                    i['unit_of_measure'] = metric[1]
+                return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
+                                                                        'ingredients':ingredients, \
+                                                                            'yield': results.o_yield, \
+                                                                                'targs':targs})
+            else:    
+                for i in targs:
+                    converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
+                    i['amt'] = converted[0]
+                    i['unit_of_measure'] = converted[1]
+                return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
+                                                                                'ingredients':ingredients, \
+                                                                                    'yield': results.o_yield, \
+                                                                                        'targs':targs})
+   
 
+# This should be linked to the checkbox in recipe_view.html
+def cart(request):
+    #results = Recipe.objects.get(id=id)
+    #ingredient = Ingredients.objects.filter(recipe = results)
+    
+    response = render(request, 'reciplan/cart.html')  
+    if request == "POST":
+        response.set_cookie('cart', 'These are the items in the cart')
 
-        return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                'ingredients':ingredients, \
-                                                                    'yield': results.o_yield, \
-                                                                        'targs':targs})
+    return response

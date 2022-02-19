@@ -12,10 +12,10 @@ class Recipe(models.Model):
 class Ingredients(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length = 50)
-    amt = models.IntegerField()
+    amt = models.FloatField()
     UOM = (
-        ('fl_oz', 'fl oz'),
-        ('fl_cups', 'fl cups'),
+        ('fl_oz', 'fl_oz'),
+        ('fl_cups', 'fl_cups'),
         ('cups', 'cups'),
         ('pints', 'pints'),
         ('quarts', 'quarts'), 
