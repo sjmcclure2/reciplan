@@ -102,9 +102,9 @@ def search(request):
     #these might look good as bootstrap cards, currently limited to 5 recipes but can increase
     return render(request, 'reciplan/search.html', {'recipes':recipes})
 
-#this is what is shown once the search recipe is clicked
-#this is where my conversions will happen
-def detail(request, id): 
+
+def detail(request, id):
+
     results = Recipe.objects.get(id=id)
     ingredients = Ingredients.objects.filter(recipe = results)
 
