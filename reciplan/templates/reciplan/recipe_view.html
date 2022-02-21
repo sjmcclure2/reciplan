@@ -1,5 +1,106 @@
 {% extends 'reciplan/base.html'%}
+
 {% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="/media/{{ recipe.image }}" width="500px"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>{{ recipe.title }}</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          {{ recipe.description }}
+        </div>
+        <hr>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12 d-flex flex-row justify-content-center">
+          <form method="POST" id="chyield">
+            {% csrf_token%}
+            <div class="form-row ">
+              <div class="form-group col-md-12">
+                <h4>Original Yield: {{recipe.o_yield}}</h4>
+                <label for="targetYield"><h4>Target Yield:</h4></label>
+                <input id="targetYield" name="targetYield" type="text" maxlength="4" size="4">
+                <button type="submit" class="btn btn-warning">Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <hr>
+      </div>
+      <div class="row">
+        <div class="col-md-6 d-flex flex-row justify-content-center">
+          <button class="btn btn-warning" type="submit">Convert to Imperial</button>
+        </div>
+        <div class="col-md-6 d-flex flex-row justify-content-center">
+
+          <button class="btn btn-warning" type="submit">Convert to Metric</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Org Amt</th>
+            <th scope="col">UOM</th>
+            <th scope="col">Target Amt</th>
+            <th scope="col">UOM</th>
+            <th scope="col">Ingredient</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ingredient in ingredients %}
+          <tr>
+            <td>{{ ingredient.amt }}</td>
+            <td>{{ ingredient.unit_of_measure }}</td>
+            <td>{{ ingredient.amt }}</td>
+            <td>{{ ingredient.unit_of_measure }}</td>
+            <td>{{ ingredient.name }}</td>
+            <th scope="col">
+              <button id="" class="btn cart btn-success">Add to Cart</button>
+            </th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-12">
+      <h2>Directions</h2>
+      {{ recipe.directions }}
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
 <h1>{{ recipe.title }}</h1>
 
 <table>
@@ -34,6 +135,22 @@
     <td> {{ recipe.directions }} </td>
   </tr>
 </table>
+
+<form method="POST">{% csrf_token %}<button type='submit'>button</button></form>
+-->
+<!-- <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{recipe.title}}</h5>
+      <p class="card-text">{{recipe.description}}</p>
+      <ul>
+
+        {% for ingredient in ingredients %}
+        <li>{{ ingredient.name }} {{ ingredient.amt }} {{ ingredient.unit_of_measure }}</li>
+        {% endfor %}
+      </ul>
+      {% for ingredient in ingredients %}
+
 
 <form method="POST">
   {% csrf_token %}
