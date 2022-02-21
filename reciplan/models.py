@@ -1,6 +1,10 @@
 from django.db import models
 
 class Recipe(models.Model):
+
+    def __str__(self):
+        return self.title
+
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
     o_yield = models.IntegerField()
@@ -11,7 +15,6 @@ class Recipe(models.Model):
 class Ingredients(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    amt = models.IntegerField()
+    amt = models.FloatField()
     unit_of_measure = models.CharField(max_length=10)
     in_cart = models.BooleanField(default=False)
-
