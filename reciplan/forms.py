@@ -19,12 +19,6 @@ class CustomUserCreationForm(UserCreationForm):
         fields = UserCreationForm.Meta.fields + ("email",)
 
 class RecipeForm(ModelForm):
-
-    def clean_title(self):
-        if Recipe.objects.filter(title=self.cleaned_data['title']).exists():
-            raise forms.ValidationError("That recipe title already exists, choose another")
-        return self.cleaned_data['title']
-
     class Meta:
         model = Recipe
         fields = ['title','o_yield','image','url','directions','description']

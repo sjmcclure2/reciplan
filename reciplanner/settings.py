@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^9vcivgec_!$+g6e*g4lag#z5s-z9$ig_$il(cq7=%5w+a3t*x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['reciplan.site','www.reciplan.site','159.223.171.170','localhost', '127.0.0.1',]
+ALLOWED_HOSTS = ['reciplan.site','www.reciplan.site','159.223.171.170','localhost']
 
 
 # Application definition
