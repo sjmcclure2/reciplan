@@ -1,85 +1,60 @@
-<style>
-    .card-img-top {
-        width: 100%;
-        height: 10vw;
-        object-fit: cover;
-    }
-
-    .card-title{
-        font-weight: bolder;
-    }
-</style>
-
 {% extends 'reciplan/base.html' %}
 
 {% block content %}
 
-<!-- DH: Removed salutation. Username present in base navbar -->
+<!--Salutation that will show guest if no logged in user-->
+<h1>Welcome {{ user.username|default:'Guest'}}</h1>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <form class="card card-sm" action="{% url 'search' %}" method="POST">
-                <div class="card-body row no-gutters align-items-center">
-                    <div class="col">
-                        {% csrf_token %}
-                        <input type="search" name='item_name' placeholder="Search recipes" class="form-control form-control-borderless">
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-success" type="submit">Search</button>
-                    </div>
+<form action="{% url 'search' %}" method="POST">
+    {% csrf_token %} 
+    <p>Recipe Name: <input type="text" name="name"></p>
+    <input type="submit" name="submit" value="Search">
+</form>
+<!--If there is a query item sent this will run-->
+<!--query only sent if the form is posted with input-->
+{%if query%}
+    <!--If there are results this will display them in a list-->
+    {% if results%}
+        <h2>Here are recipes containing the word {{query}}</h2>
+        
+            {% for result in results %}
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="/media/{{result.image}}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">{{result.title}}</h5>
+                  <p class="card-text">{{result.description}}</p>
+                  <a href="{% url 'detail' id=result.id %}" class="btn btn-primary">View Full Recipe</a>
                 </div>
-            </form>
+              </div>
+        {% endfor %}
+    <!--No results for the word will display the below-->
+    {%else%}
+        <h2>There are no recipes containing the word {{query}}</h2>
+        <!--A no result will display all of the recipes again-->
+        <h2>Here are five of the current recipes in the database</h2>
+        {% for recipe in recipes %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{recipe.title}}</h5>
+              <p class="card-text">{{recipe.description}}</p>
+              <a href="{% url 'detail' id=recipe.id %}" class="btn btn-primary">View Full Recipe</a>
+            </div>
+          </div>
+        {% endfor %}
+    {%endif%}
+{% else %}
+<!--this will display five choices from the DB just to put something on the page for the user to look at-->
+    <h2>Here are five of the current recipes in the database</h2>
+    {% for recipe in recipes %}
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">{{recipe.title}}</h5>
+        <p class="card-text">{{recipe.description}}</p>
+        <a href="{% url 'detail' id=recipe.id %}" class="btn btn-primary">View Full Recipe</a>
         </div>
     </div>
-    <div class="row">
-        <!--If there is a query item sent this will run-->
-        <!--query only sent if the form is posted with input-->
-        {% if query %}
-            <!--If there are results this will display them in a list-->
-            {% if results %}
-                <h2>Here are recipes containing the word {{ query }}</h2>
-                <div class="col-md-6">
-                {% for result in results %}
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="/media/{{result.image}}" alt="Card image cap">
-                        <div class="card-body">
-                            <div class="card-title">{{result.title}}</div>
-                            <div class="card-text">{{result.description}}</div>
-                            <a href="{% url 'detail' name=result.title %}" class="btn btn-primary">View</a>
-                        </div>
-                    </div>
-                {% endfor %}
-                <!--No results for the word will display the below-->
-                {% else %}
-                    <h2>There are no recipes containing the word {{query}}</h2>
-                    <!--A no result will display all of the recipes again-->
-                    <h2>Here are five of the current recipes in the database</h2>
-                    {% for recipe in recipes %}
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">{{recipe.title}}</h5>
-                                <p class="card-text">{{recipe.description}}</p>
-                                <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% else %}
-                <!--this will display five choices from the DB just to put something on the page for the user to look at-->
-                {% for recipe in recipes %}
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
-                            <div class="card-body">
-                                <div class="card-title">{{recipe.title}}</div>
-                                <div class="card-text">{{recipe.description}}</div>
-                                <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View</a>
-                            </div>
-                        </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </div>
-</div>
+    {% endfor %}
+{% endif %}
 {% endblock %}
