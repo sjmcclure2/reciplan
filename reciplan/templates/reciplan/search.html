@@ -47,7 +47,7 @@
                         <div class="card-body">
                             <div class="card-title">{{result.title}}</div>
                             <div class="card-text">{{result.description}}</div>
-                            <a href="{% url 'detail' name=result.title %}" class="btn btn-primary">View</a>
+                            <a href="{% url 'detail' id=result.id %}" class="btn btn-primary">View</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -62,7 +62,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{recipe.title}}</h5>
                                 <p class="card-text">{{recipe.description}}</p>
-                                <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View</a>
+                                <a href="{% url 'detail' id=recipe.id %}" class="btn btn-primary">View</a>
                             </div>
                         </div>
                     {% endfor %}
@@ -75,7 +75,7 @@
                             <div class="card-body">
                                 <div class="card-title">{{recipe.title}}</div>
                                 <div class="card-text">{{recipe.description}}</div>
-                                <a href="{% url 'detail' name=recipe.title %}" class="btn btn-primary">View</a>
+                                <a href="{% url 'detail' id=recipe.id %}" class="btn btn-primary">View</a>
                             </div>
                         </div>
                 {% endfor %}
