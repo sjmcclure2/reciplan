@@ -1,5 +1,5 @@
 /* LOGIN FORM */
-/*
+
 .login {
     background: var(--darkened-bg);
     height: auto;
@@ -58,9 +58,4 @@
 
 .login .password-reset-link {
     text-align: center;
-}
-*/
-
-#logout{
-    color:tomato;
 }

@@ -88,15 +88,14 @@ def register(request):
             return redirect(reverse('register'))
     
 def search(request):
-    #get the first 8 recipes from the DB
-    recipes = Recipe.objects.all()[0:8]
-
+    #get the first 5 recipes from the DB
+    recipes = Recipe.objects.all()[0:5]
     #if the method is POST take the form input
     if request.method == "POST":
         query_name = request.POST.get('name', None)
         if query_name:
             #query the DB for recipes with a title containing the search term
-            results = Recipe.objects.filter(title__icontains=query_name)
+            results = Recipe.objects.filter(title__contains=query_name)
             #return the search template with the required variables for the display
             return render(request, 'reciplan/search.html', {"results":results, "query":query_name, 'recipes':recipes})
     #if there are no results display all available recipes in a list.
