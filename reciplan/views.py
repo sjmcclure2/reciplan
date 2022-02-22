@@ -112,15 +112,15 @@ def detail(request, id):
     if request.method == 'GET':
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
                                                                 'ingredients':ingredients, \
-                                                                    'yield': results.o_yield, \
-                                                                        'targs':ingredients})    
+                                                                    'yield': results.o_yield})    
     else: 
         targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure', 'cup_amt')
 
         for i in targs:
             # If the user wants to see metric measurements, this will convert the updated yield
             # amount into metric
-            if request.POST['unit_conv'] == 'Metric':
+            
+            if request.POST['unit_conv'] == 'metric':
                 for i in targs:
                     converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
                     i['amt'] = converted[0]
@@ -132,7 +132,7 @@ def detail(request, id):
                                                                         'ingredients':ingredients, \
                                                                             'yield': results.o_yield, \
                                                                                 'targs':targs})
-            else:    
+            elif request.POST['unit_conv'] == 'imperial':    
                 for i in targs:
                     converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
                     i['amt'] = converted[0]
@@ -141,7 +141,7 @@ def detail(request, id):
                                                                                 'ingredients':ingredients, \
                                                                                     'yield': results.o_yield, \
                                                                                         'targs':targs})
-   
+            
 
 # This should be linked to the checkbox in recipe_view.html
 def cart(request):

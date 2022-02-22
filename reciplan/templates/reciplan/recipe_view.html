@@ -1,49 +1,111 @@
 {% extends 'reciplan/base.html'%}
 {% block content %}
-<h1>{{ recipe.title }}</h1>
 
-<table>
-  <tr>
-    <th>Org<br>Amt</th>
-    <th>UOM</th>
-    <th>Ingredient</th>
-    <th>Add to Shopping List</th>
-  </tr>
-  
-  {% for targ in targs %}
-  <tr>
-    <td>{{ targ.amt }}</td>
-    <td>{{ targ.unit_of_measure }}</td>
-    </tr>
-  {% endfor %}
 
-  {% for ingredient in ingredients %}
-  <tr>
-    <td>{{ ingredient.amt }}</td>
-    <td>{{ ingredient.unit_of_measure }}</td>
-    <td>{{ ingredient.name }}</td>
-    <td> <input method="POST" type="checkbox" name="is_checked"></td> <!--This feeds into cart.views -->
-  </tr>
-    {% endfor %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="/media/{{ recipe.image }}" width="500px"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>{{ recipe.title }}</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          {{ recipe.description }}
+        </div>
+        <hr>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-12 d-flex flex-row justify-content-center">
+          <form method="POST" id="chyield">
+            {% csrf_token%}
+            <div class="form-row ">
+              <div class="form-group col-md-12">
+                <h4>Original Yield: {{recipe.o_yield}}</h4>
+                <label for="targetYield"><h4>Target Yield:</h4></label>
+                <input id="targetYield" name="convert_y" type="text" maxlength="4" size="4" value={{recipe.o_yield}}>
+                <button type="submit" class="btn btn-warning">Update</button>
+                <div class="row">
+                  <!--converted to radio buttons and put in the form as they are expected args for the view(jc)-->
+                  <div class="col-md-6 d-flex flex-row justify-content-center">
+                    <input type="radio" name="unit_conv" checked=true value="imperial">Convert to Imperial</input>
+                  </div>
+                  <div class="col-md-6 d-flex flex-row justify-content-center">
+                    <input type="radio" name="unit_conv" value="metric">Convert to Metric</input>
+              </div>
+            </div>
+          </form>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Org Amt</th>
+            <th scope="col">UOM</th>
+            <th scope="col">Ingredient</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ingredient in ingredients %}
+          <tr>
+            <td>{{ ingredient.amt }}</td>
+            <td>{{ ingredient.unit_of_measure }}</td>
+            <td>{{ ingredient.name }}</td>
+            <th scope="col">
+              <button id="" class="btn cart btn-success">Add to Cart</button>
+            </th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      <!--Added second table to get the new units in(jc)--> 
+      {% if targs %} 
+      </table>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Target Amt</th>
+            <th scope="col">UOM</th>
+            <th scope="col">Ingredient</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--Could not find a way to loop through targs and ingredients so had to split out(jc)-->
+          {% for targ in targs %}
+          <tr>
+            <td>{{ targ.amt }}</td>
+            <td>{{ targ.unit_of_measure }}</td>
+            <td>{{ targ.name }}</td>
+            <th scope="col">
+              <button id="" class="btn cart btn-success">Add to Cart</button>
+            </th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+    <div class="col-md-12">
+      <h2>Directions</h2>
+      {{ recipe.directions }}
+    </div>
+  </div>
+</div>
 
-  
-  <tr>{{ recipe.description }} </tr>
-</table>
-<table>
-  <tr>
-    <td> {{ recipe.directions }} </td>
-  </tr>
-</table>
-
-<form method="POST">
-  {% csrf_token %}
-  <label for="convert_yield">Adjust yield:</label>
-  <input type="number" id="convert_yield" name="convert_y" min="1" max="9999" value="1">
-  <input type="radio" id="metric" name ="unit_conv" value="Metric">
-  <label for="imperial">Metric</label><br>
-  <input type="radio" id="imperial" name="unit_conv" value="Imperial" checked> 
-  <label for="imperial">Imperial</label><br>
-  <button type='submit'>Apply</button> 
-</form> 
 
 {% endblock %}
