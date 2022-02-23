@@ -1,3 +1,12 @@
+#File:       views.py
+#Authors:    Joshua Coe, Scott McClure, Danita Hodges
+#Purpose:    Define views for ReciPlan app
+##Version:   1.2
+#Version Notes:
+#            1.0 - JC - Initial creation, initial functions
+#            1.1 - SM - Detail view
+#            1.2 - DH - Modified search view to 8
+
 from distutils import errors
 from sre_constants import IN
 from django.shortcuts import render, redirect
@@ -51,7 +60,6 @@ class RecipeCreate(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('detail', kwargs={'id':self.object.id})
-    
 
 #Registration function
 def register(request):
@@ -88,20 +96,20 @@ def register(request):
             return redirect(reverse('register'))
     
 def search(request):
-    #get the first 5 recipes from the DB
-    recipes = Recipe.objects.all()[0:5]
+    #get the first 8 recipes from the DB
+    recipes = Recipe.objects.all()[0:8]
+
     #if the method is POST take the form input
     if request.method == "POST":
         query_name = request.POST.get('name', None)
         if query_name:
             #query the DB for recipes with a title containing the search term
-            results = Recipe.objects.filter(title__contains=query_name)
+            results = Recipe.objects.filter(title__icontains=query_name)
             #return the search template with the required variables for the display
             return render(request, 'reciplan/search.html', {"results":results, "query":query_name, 'recipes':recipes})
     #if there are no results display all available recipes in a list.
-    #these might look good as bootstrap cards, currently limited to 5 recipes but can increase
+    #these might look good as bootstrap cards, currently limited to 8 recipes but can increase
     return render(request, 'reciplan/search.html', {'recipes':recipes})
-
 
 def detail(request, id):
 
@@ -141,7 +149,6 @@ def detail(request, id):
                                                                                 'ingredients':ingredients, \
                                                                                     'yield': results.o_yield, \
                                                                                         'targs':targs})
-   
 
 # This should be linked to the checkbox in recipe_view.html
 def cart(request):

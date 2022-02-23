@@ -1,4 +1,20 @@
+/*
+File:       navbar.css
+Authors:    Danita Hodges
+Purpose:    Style for base.html
+Version:    1.0
+Version Notes:
+            1.0 - DH - Initial creation
+*/
+
+body { 
+    padding-top: 80px;
+    padding-left: 10%; 
+}
+li{
+    font-weight:bolder;
+    font-size:larger;
+}
 li:hover{
-    color: white;
-    text-decoration: none;
+    background-color: white;
 }

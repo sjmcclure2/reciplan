@@ -1,3 +1,10 @@
+#File:       urls.py
+#Authors:    Joshua Coe, Scott McClure, Danita Hodges
+#Purpose:    Define url paths for ReciPlan app
+##Version:   1.2
+#Version Notes:
+#            1.0 - JC - Initial creation
+
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from . import views
