@@ -1,7 +1,21 @@
+#File:       models.py
+#Authors:    Joshua Coe, Scott McClure, Danita Hodges
+#Purpose:    Define models for ReciPlan app
+##Version:   1.2
+#Version Notes:
+#            1.0 - JC - Initial creation, initial model creation
+#            1.1 - SM - Ingredients model
+#            1.2 - DH - Added title string for recipe model
+
 from django.db import models
 from . import conversions
+from django.urls import reverse
 
 class Recipe(models.Model):
+
+    def __str__(self):
+        return self.title
+
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
     o_yield = models.IntegerField()
@@ -32,5 +46,3 @@ class Ingredients(models.Model):
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
     cup_amt = models.FloatField(null=True)
-    
-  
