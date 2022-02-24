@@ -24,6 +24,10 @@ class Recipe(models.Model):
     url = models.URLField(blank=True)
 
 class Ingredients(models.Model):
+    
+    def __str__(self):
+        return (f'{self.name} - {self.recipe}')
+    
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length = 50)
     amt = models.FloatField()
@@ -46,3 +50,4 @@ class Ingredients(models.Model):
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
     cup_amt = models.FloatField(null=True)
+

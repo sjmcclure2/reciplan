@@ -18,3 +18,12 @@ li{
 li:hover{
     background-color: white;
 }
+
+.offcanvas-body{
+    padding-left: 1rem;
+}
+
+#offcanvasNavbar{
+    width: 15%;
+}
+
