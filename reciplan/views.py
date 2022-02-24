@@ -6,6 +6,8 @@
 #            1.0 - JC - Initial creation, initial functions
 #            1.1 - SM - Detail view
 #            1.2 - DH - Modified search view to 8
+#            1.4 - JC - Removed targs from GET request for detail view
+
 
 from distutils import errors
 from sre_constants import IN
@@ -120,14 +122,15 @@ def detail(request, id):
     if request.method == 'GET':
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
                                                                 'ingredients':ingredients, \
-                                                                    'yield': results.o_yield, \
-                                                                        'targs':ingredients})    
+                                                                    'yield': results.o_yield})    
     else: 
         targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure', 'cup_amt')
 
         for i in targs:
             # If the user wants to see metric measurements, this will convert the updated yield
             # amount into metric
+            if request.method == 'POST':
+                print(request.POST)
             if request.POST['unit_conv'] == 'Metric':
                 for i in targs:
                     converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
@@ -136,8 +139,10 @@ def detail(request, id):
                     metric = conversions.Convert.metric_imperial(converted[0], converted[1])
                     i['amt'] = metric[0]
                     i['unit_of_measure'] = metric[1]
+
+                output = zip(ingredients, targs)
                 return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                        'ingredients':ingredients, \
+                                                                        'ingredients':output, \
                                                                             'yield': results.o_yield, \
                                                                                 'targs':targs})
             else:    
