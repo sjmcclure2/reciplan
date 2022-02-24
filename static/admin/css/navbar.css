@@ -1,4 +1,29 @@
-li:hover{
-    color: white;
-    text-decoration: none;
+/*
+File:       navbar.css
+Authors:    Danita Hodges
+Purpose:    Style for base.html
+Version:    1.0
+Version Notes:
+            1.0 - DH - Initial creation
+*/
+
+body { 
+    padding-top: 80px;
+    padding-left: 10%; 
 }
+li{
+    font-weight:bolder;
+    font-size:larger;
+}
+li:hover{
+    background-color: white;
+}
+
+.offcanvas-body{
+    padding-left: 1rem;
+}
+
+#offcanvasNavbar{
+    width: 15%;
+}
+

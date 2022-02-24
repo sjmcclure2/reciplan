@@ -9,6 +9,7 @@ Version Notes:
                        salutation present in navbar, added styling, changed
                        results from 5 to 8
             1.3 - DH - Fixed errors from merge error
+            1.4 - DH - Fixed search results alignment
 -->
 
 <!-- Additional styling -->
@@ -22,13 +23,21 @@ Version Notes:
     .card-title{
         font-weight: bolder;
     }
+
+    #block{
+        padding-left: 5%;
+    }
+
+    #search_results{
+        padding-left: 3%;
+    }
 </style>
 
 {% extends 'reciplan/base.html' %}
 {% load static %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" id="block">
         <div class="row">
             <div class="col-md-12">
                 <form class="card card-sm" action="{% url 'search' %}" method="POST">
@@ -44,14 +53,14 @@ Version Notes:
                 </form>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="search_results">
             <!--If there is a query item sent this will run-->
             <!--query only sent if the form is posted with input-->
             {% if query %}
                 <!--If there are results this will display them in a list-->
                 {% if results %}
                     <h2>Here are recipes containing " {{ query }} "</h2>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                     {% for result in results %}
                         <div class="card" style="width: 18rem;">
                             <img class="card-img-top" src="/media/{{result.image}}" alt="Card image cap">
