@@ -139,14 +139,13 @@ def detail(request, id):
                     metric = conversions.Convert.metric_imperial(converted[0], converted[1])
                     i['amt'] = metric[0]
                     i['unit_of_measure'] = metric[1]
-
-                output = zip(ingredients, targs)
                 return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                        'ingredients':output, \
+                                                                        'ingredients':ingredients, \
                                                                             'yield': results.o_yield, \
                                                                                 'targs':targs})
             else:    
                 for i in targs:
+                    print(i)
                     converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
                     i['amt'] = converted[0]
                     i['unit_of_measure'] = converted[1]
