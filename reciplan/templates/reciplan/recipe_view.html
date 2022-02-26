@@ -12,6 +12,8 @@ Version Notes:
                        Added hidden input field for unit_conv
                        corrected variable to match view input
                        set default value for convert_y
+            1.5 - JC - updated conversion table
+                       added conditional for target yield
 -->
 
 {% extends 'reciplan/base.html'%}
@@ -60,7 +62,13 @@ Version Notes:
               <div class="form-group col-md-12">
                 <input id="unit_conv" name="unit_conv" type="hidden" maxlength="4" size="4" value="Metric">
                 <label for="convert_y" ><h4>Target Yield:</h4></label>
-                <input id="convert_y" name="convert_y" type="text" maxlength="4" size="4" value={{recipe.o_yield}}>
+                <!--Add conditional format for the target yield box-->
+                {% if new_yield %}
+                  <input id="convert_y" name="convert_y" type="text" maxlength="4" size="4" value={{new_yield}}> 
+                {% else %}
+                  <input id="convert_y" name="convert_y" type="text" maxlength="4" size="4" value={{recipe.o_yield}}>
+                {% endif %}
+                
                 <button type="submit" class="btn btn-warning">Update</button>
               </div>
               <div class="row">
@@ -88,20 +96,36 @@ Version Notes:
             <th scope="col"><!--Add to Cart--></th>
           </tr>
         </thead>
-        <tbody>
-          {% for ingredient in ingredients %}
-          <tr>
-            <td>{{ ingredient.amt }}</td>
-            <td>{{ ingredient.unit_of_measure }}</td>
-            <td>{{ ingredient.amt }}</td>
-            <td>{{ ingredient.unit_of_measure }}</td>
-            <td>{{ ingredient.name }}</td>
-            <th scope="col">
-              <button id="" class="btn cart btn-success">Add to Cart</button>
-            </th>
-          </tr>
-          {% endfor %}
-        </tbody>
+        <!--add conditional table fill for converted or original recipe-->
+        {% if targs%}
+          <tbody>
+            {% for ingredient in targs %}
+            <tr>
+              <td>{{ ingredient.0 }}</td>
+              <td>{{ ingredient.1 }}</td>
+              <td>{{ ingredient.2 }}</td>
+              <td>{{ ingredient.3 }}</td>
+              <td>{{ ingredient.4 }}</td>
+              <th scope="col">
+                <button id="" class="btn cart btn-success">Add to Cart</button>
+              </th>
+            </tr>
+            {% endfor %}
+          </tbody>
+      {% else %}
+        {% for ingredient in ingredients %}
+        <tr>
+          <td>{{ ingredient.amt }}</td>
+          <td>{{ ingredient.unit_of_measure }}</td>
+          <td> - </td>
+          <td> - </td>
+          <td>{{ ingredient.name }}</td>
+          <th scope="col">
+            <button id="" class="btn cart btn-success">Add to Cart</button>
+          </th>
+        </tr>
+        {% endfor %}
+      {% endif %}
       </table>
     </div>
     <div class="col-md-12">
