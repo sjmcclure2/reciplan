@@ -1,7 +1,16 @@
+#File:       forms.py
+#Authors:    Joshua Coe, Scott McClure, Danita Hodges
+#Purpose:    Define forms for ReciPlan app
+##Version:   1.2
+#Version Notes:
+#            1.0 - JC - Initial creation, user creation
+#            1.1 - JC - Ingredients form, create recipe form
+#            1.2 - DH - Directions form, create recipe field order
+
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from reciplan.models import Ingredients, Recipe
+from reciplan.models import Ingredients, Recipe, Direction
 from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
@@ -27,7 +36,7 @@ class RecipeForm(ModelForm):
 
     class Meta:
         model = Recipe
-        fields = ['title','o_yield','image','url','directions','description']
+        fields = ['title','description','o_yield','image','url']
 
     def __init__(self, *args, **kwargs):
         super(RecipeForm, self).__init__(*args, **kwargs)
@@ -39,13 +48,15 @@ class RecipeForm(ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field('title'),
+                Field('description'),
                 Field('o_yield'),
                 Field('image'),
                 Field('url'),
                 Fieldset('Add Ingredients',
                     Formset('Ingredients')),
-                Field('directions'),
-                Field('description'),
+                Fieldset('Add Directions',
+                    Formset('Directions')),
+                
                 HTML("<br>"),
                 ButtonHolder(Submit('submit', 'save')),
                 )
@@ -54,11 +65,19 @@ class RecipeForm(ModelForm):
 class IngredientsForm(ModelForm):
     class Meta:
         model = Ingredients
-        exclude = ()
+        exclude = ()    
 
-        
+class DirectionsForm(ModelForm):
+    class Meta:
+        model = Direction
+        exclude = ()
 
 IngredientsFormSet = inlineformset_factory(
     Recipe, Ingredients, form=IngredientsForm,
-    fields=['name','amt','unit_of_measure'], extra=1, can_delete=True
+    fields=['amt', 'unit_of_measure', 'name'], extra=1, can_delete=True
+)
+
+DirectionsFormSet = inlineformset_factory(
+    Recipe, Direction, form = DirectionsForm,
+    fields = ['instruction'], extra = 1, can_delete=True
 )
