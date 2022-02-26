@@ -11,6 +11,8 @@ Version Notes:
             1.3 - DH - Fixed errors from merge error
             1.4 - DH - Fixed search results alignment
             1.5 - DH - Added search dropdown
+            1.6 - JC - Changed search dropdown to select list
+                       Added my-list css class
 -->
 
 <!-- Additional styling -->
@@ -28,6 +30,13 @@ Version Notes:
     #search_results{
         padding-left: 1%;
     }
+    .my-select {
+    background-color: #e6e042;
+    color: #5F6162;
+    border: 0 none;
+    border-radius: 20px;
+    padding: 6px 20px;
+  }
 </style>
 
 {% extends 'reciplan/base.html' %}
@@ -39,11 +48,23 @@ Version Notes:
             <div class="col-md-11">
                 <form class="card card-sm" action="{% url 'search' %}" method="POST">
                     <div class="card-body row no-gutters align-items-center">
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             {% csrf_token %}
                             <input type="search" name='name' placeholder="Search" class="form-control form-control-borderless"/>
                         </div>
-                        <div class="col-md-2">
+                        <!--New Selector Begin-->
+                        <div class="col-md-2 ">
+                                <select class="my-select" id="search_category" name="search_category">
+                                <option>Recipe Title</option>
+                                <option>Ingredients</option>
+                                </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </div>
+                        <!--New Selector End-->
+                        <!--Old Selector Being-->  
+                        <!-- <div class="col-md-2">
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                   Looking for...
@@ -53,10 +74,8 @@ Version Notes:
                                   <li><a class="dropdown-item" href="#">Ingredients</a></li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-success" type="submit">Search</button>
-                        </div>                            
+                        </div> --> 
+                        <!--Old Selector Being-->                         
                     </div>
                 </form>
             </div>
@@ -83,7 +102,7 @@ Version Notes:
                 {% else %}
                     <h2>There are no recipes containing the word {{query}}</h2>
                     <!--A no result will display all of the recipes again-->
-                    <h2>Here are 8 other recipes</h2>
+                    <h2>Here are some other recipes</h2>
                     {% for recipe in recipes %}
                         <div class="card" style="width: 18rem;">
                             <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
