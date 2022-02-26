@@ -2,7 +2,7 @@
 File:       recipe_view.html
 Authors:    Joshua Coe, Scott McClure, Danita Hodges
 Purpose:    Search page for recipes
-Version:    1.3
+Version:    1.6
 Version Notes:
             1.0 - JC - Initial creation, query
             1.1 - SM - Added conversion function and form
@@ -14,20 +14,19 @@ Version Notes:
                        set default value for convert_y
             1.5 - JC - updated conversion table
                        added conditional for target yield
+            1.6 - DH - Page title, started add to cart function
 -->
 
 {% extends 'reciplan/base.html'%}
 {% block content %}
 
 <style>
-  #block{
-    padding-left: 3%;
-  }
+    #block{
+      padding-left: 3%;
+    }
 </style>
 
-
-
-<title>{{ recipe.title }}</title>
+<title>ReciPlan | {{ recipe.title }}</title>
 
 <div class="container" id="block">
   <div class="row">
@@ -68,7 +67,6 @@ Version Notes:
                 {% else %}
                   <input id="convert_y" name="convert_y" type="text" maxlength="4" size="4" value={{recipe.o_yield}}>
                 {% endif %}
-                
                 <button type="submit" class="btn btn-warning">Update</button>
               </div>
               <div class="row">
@@ -83,6 +81,8 @@ Version Notes:
       </div>
     </div>
   </div>
+
+  <!-- Display ingredients -->
   <div class="row">
     <div class="col-md-12">
       <table class="table">
@@ -107,6 +107,51 @@ Version Notes:
               <td>{{ ingredient.3 }}</td>
               <td>{{ ingredient.4 }}</td>
               <th scope="col">
+                <button id="" class="btn atc btn-success">Add to Cart</button>
+              </th>
+            </tr>
+            {% endfor %}
+
+        {% else %}
+            {% for ingredient in ingredients %}
+            <tr>
+              <td id="amt{{ ingredient.amt }}">{{ ingredient.amt }}</td>
+              <td id="uom{{ ingredient.unit_of_measure }}">{{ ingredient.unit_of_measure }}</td>
+              <td> - </td>
+              <td> - </td>
+              <td id="ing{{ ingredient.name }}">{{ ingredient.name }}</td>
+              <th scope="col">
+                <button id="" class="btn atc btn-success">Add to Cart</button>
+              </th>
+            </tr>
+            {% endfor %}
+        {% endif %}
+      </tbody>
+
+      </table>
+    </div>
+  </div>
+
+  <!--Display directions-->
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Directions</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Step</th>
+            <th scope="col">Instruction</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for direction in directions %}
+          <tr>
+            <td>{{ direction.step }}</td>
+            <td>{{ direction.instruction }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+=======
                 <button id="" class="btn cart btn-success">Add to Cart</button>
               </th>
             </tr>
@@ -128,13 +173,10 @@ Version Notes:
       {% endif %}
       </table>
     </div>
-    <div class="col-md-12">
-      <h2>Directions</h2>
-      {{ recipe.directions }}
-    </div>
   </div>
 </div>
 
+<!--Convert imperial to metric-->
 <script>
   function swap_conversion(){
     var current = document.getElementById("unit_conv_btn").innerHTML;
@@ -146,6 +188,37 @@ Version Notes:
       document.getElementById("unit_conv_btn").innerHTML = "Metric";
     }
   }
+</script>
+
+<!--Add items to shopping list-->
+<script type="text/javascript">
+  console.log('This is working');
+
+  if(localStorage.getItem('cart')==null){
+    var cart = {};
+  }else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }// end if else
+  
+  $(document).on('click', '.atc', function(){
+    console.log("The add to cart button is clicked.");
+    var item_id = this.id.toString();
+    console.log(item_id);
+
+    if(cart[item_id] != undefined){
+      amount = cart[item_id][0] + parseFloat(document.getElementById("amt" + item_id).innerHTML);
+      cart[item_id][0] = amount;
+    }else{
+      amount = parseFloat(document.getElementById("amt" + item_id).innerHTML);
+      uom = document.getElementById("uom" + item_id).innerHTML;
+      ingredient = document.getElementById("ing" + item_id).innerHTML;
+      cart[item_id] = [amount, uom, ingredient];
+    }// end if-else
+      console.log(cart);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById("cart").innerHTML = "Cart (" + Object.keys(cart).length + ")";
+  });
+  
 </script>
 
 {% endblock %}
