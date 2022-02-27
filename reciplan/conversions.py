@@ -80,7 +80,7 @@ class Convert:
             return round((1/16) * adj_amt, 2), unit
         
     @staticmethod
-    def update_m_units(cup_amt, t_yield):
+    def update_m_units(cup_amt, t_yield, unit):
         adj_amt = cup_amt * t_yield
         if(unit == "Kg"):
             unit = "lbs"
@@ -89,7 +89,7 @@ class Convert:
             unit = "oz"
             return round(adj_amt/28.35, 2), unit
         # Add lbs and oz to be converted into the proper imperial yield ready for metric conversion
-        else:
+        else:   
             return round(adj_amt, 2), unit
         
     @staticmethod  
@@ -142,7 +142,7 @@ def convert_yield(t_yield, unit, cup_amt):
     elif(unit == "fl_oz" or unit == "fl_cups" or unit == "pints" or unit == "quarts" or unit == "gallons" or unit == "mL" or unit == "liters"):
         return Convert.update_l_units(cup_amt, t_yield)
     elif(unit == "lbs" or unit == "Kg" or unit == "oz" or unit == "grams"):
-        return Convert.update_m_units(cup_amt, t_yield)
+        return Convert.update_m_units(cup_amt, t_yield, unit)
     else:
         output = cup_amt * t_yield
         return round(output, 2), unit
