@@ -1,5 +1,4 @@
 class Convert:   
-     
     # This function will convert every unit into cups for 
     # to be stored in the database for later use
     def to_cups( o_yield, unit, amt):
@@ -30,11 +29,10 @@ class Convert:
             return round(cup_amt, 2) 
         else:
             return round(adj_amt, 2)
-        
-     
-    # This helper function will convert dry units of measure based on yield size
-    # Example: we wouldn’t want the recipe to return 48 tsp when it could
-    # be summed up as 1 cup.
+    
+    # 1 - 14 mL --> tsp           
+    # 15 - 29 mL --> Tbsp  
+    # 237 - 473 mL --> cup    
     @staticmethod
     def update_d_units(cup_amt, t_yield):
         adj_amt = cup_amt * t_yield
@@ -51,10 +49,12 @@ class Convert:
             unit = 'tsp'
             return round(48 * adj_amt, 2), unit
 
-
-    # This helper function will convert liquid units of measure based on yield size
-    # Example: we wouldn’t want the recipe to return 8 fl oz when it could
-    # be summed up as 1 cup.
+        
+    # 30 - 236 mL --> fl oz  
+    #              --> fl_cups            
+    # 474 - 949 mL --> pint     
+    # 0.95 - 3.7 L --> quart     
+    # 3.8 and up L --> gallon                
     @staticmethod
     def update_l_units(cup_amt, t_yield):
         adj_amt = cup_amt * t_yield
@@ -64,7 +64,7 @@ class Convert:
             return round(8.115 * adj_amt, 2), unit
         # If the amt is between 1 and 4 cups, maintain measurement in cups
         elif adj_amt >= 1 and adj_amt <= 4:
-            unit = 'cups'
+            unit = 'fl_cups'
             return round(adj_amt, 2), unit
         # if the amt is more than 5 but no more than 8 cups, convert to pints
         elif adj_amt > 5 and adj_amt < 8:
@@ -79,19 +79,19 @@ class Convert:
             unit = 'gallons'
             return round((1/16) * adj_amt, 2), unit
         
-    
-    # 1 - 14 mL --> tsp           
-    # 15 - 29 mL --> Tbsp           
-    # 30 - 236 mL --> fl oz         
-    # 237 - 473 mL --> cup        
-    # 474 - 949 mL --> pint     
-    # 0.95 - 3.7 L --> quart     
-    # 3.8 and up L --> gallon                
-    # 0 - 454 grams --> oz
-    # 455+ --> lbs   
-    # Kg (always) --> lbs  
+    @staticmethod
+    def update_m_units(cup_amt, t_yield):
+        adj_amt = cup_amt * t_yield
+        if(unit == "Kg"):
+            unit = "lbs"
+            return round(adj_amt, 2), unit
+        elif(unit == "grams"):
+            unit = "oz"
+            return round(adj_amt, 2), unit
+        # Add lbs and oz to be converted into the proper imperial yield ready for metric conversion
+        
     @staticmethod  
-    def metric_imperial(amt, unit):         
+    def to_metric(amt, unit):         
         if(unit == "tsp"):
             conv_amt = amt * 4.929
             unit = "mL"
@@ -132,14 +132,15 @@ class Convert:
             return round(conv_amt, 2), unit
         else:
             return round(amt, 2), unit
-        
-        
+
 # This function is what will be called to perform target yield conversions from the templates   
 def convert_yield(t_yield, unit, cup_amt):
     if(unit == "tsp" or unit == "Tbsp" or unit == "cups" or unit == "l_cups"):
         return Convert.update_d_units(cup_amt, t_yield)  
     elif(unit == "fl_oz" or unit == "fl_cups" or unit == "pints" or unit == "quarts" or unit == "gallons" or unit == "mL" or unit == "liters"):
         return Convert.update_l_units(cup_amt, t_yield)
+    elif(unit == "lbs" or unit == "Kg" or unit == "oz" or unit == "grams"):
+        return Convert.update_m_units(cup_amt, t_yield)
     else:
         output = cup_amt * t_yield
         return round(output, 2), unit
