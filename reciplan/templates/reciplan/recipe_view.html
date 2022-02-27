@@ -2,7 +2,7 @@
 File:       recipe_view.html
 Authors:    Joshua Coe, Scott McClure, Danita Hodges
 Purpose:    Search page for recipes
-Version:    1.7
+Version:    1.8
 Version Notes:
             1.0 - JC - Initial creation, query
             1.1 - SM - Added conversion function and form
@@ -16,6 +16,7 @@ Version Notes:
                        added conditional for target yield
             1.6 - DH - Page title, started add to cart function
             1.7 - DH - Fixed directions merge error
+            1.8 - JC - Checkbox for conversions, removed JS and button for same
 -->
 
 {% extends 'reciplan/base.html'%}
@@ -60,7 +61,6 @@ Version Notes:
             {% csrf_token%}
             <div class="form-row ">
               <div class="form-group col-md-12">
-                <input id="unit_conv" name="unit_conv" type="hidden" maxlength="4" size="4" value="Metric">
                 <label for="convert_y" ><h4>Target Yield:</h4></label>
                 <!--Add conditional format for the target yield box-->
                 {% if new_yield %}
@@ -68,14 +68,20 @@ Version Notes:
                 {% else %}
                   <input id="convert_y" name="convert_y" type="text" maxlength="4" size="4" value={{recipe.o_yield}}>
                 {% endif %}
-                <button type="submit" class="btn btn-warning">Update</button>
               </div>
               <div class="row">
                 <br>
+                <!--Added checkbox for metric conversions-->
+                <div class="col-md-12">
+                  {% if metric %}
+                  <input type="checkbox" name="unit_conv" value="Metric" checked>
+                  {% else %}
+                  <input type="checkbox" name="unit_conv" value="Metric">
+                  {% endif %}
+                  <label for="unit_conv">Metric</label>
               </div>
-              <div class="row">
-                <button type="button" id="unit_conv_btn" class="btn btn-warning" onclick="swap_conversion()">Metric</button> 
               </div>
+              <button type="submit" class="btn btn-warning">Update</button>
             </div>
           </form>
         </div>
@@ -86,7 +92,7 @@ Version Notes:
   <!-- Display ingredients -->
   <div class="row">
     <div class="col-md-12">
-      <table class="table">
+      <table class="table" id="ingredient_table">
         <thead>
           <tr>
             <th scope="col">Org Amt</th>
@@ -118,8 +124,8 @@ Version Notes:
             <tr>
               <td id="amt{{ ingredient.amt }}">{{ ingredient.amt }}</td>
               <td id="uom{{ ingredient.unit_of_measure }}">{{ ingredient.unit_of_measure }}</td>
-              <td> - </td>
-              <td> - </td>
+              <td id="target_amt"> - </td>
+              <td id="target_UOM"> - </td>
               <td id="ing{{ ingredient.name }}">{{ ingredient.name }}</td>
               <th scope="col">
                 <button id="" class="btn atc btn-success">Add to Cart</button>
@@ -155,20 +161,6 @@ Version Notes:
   </div>
 
 </div>
-
-<!--Convert imperial to metric-->
-<script>
-  function swap_conversion(){
-    var current = document.getElementById("unit_conv_btn").innerHTML;
-    if (current == 'Metric'){
-      document.getElementById("unit_conv").value = "Imperial";
-      document.getElementById("unit_conv_btn").innerHTML = "Imperial";
-    } else {
-      document.getElementById("unit_conv").value = "Metric";
-      document.getElementById("unit_conv_btn").innerHTML = "Metric";
-    }
-  }
-</script>
 
 <!--Add items to shopping list-->
 <script type="text/javascript">

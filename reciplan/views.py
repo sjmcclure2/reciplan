@@ -152,6 +152,7 @@ def detail(request, id):
 
     # Shows the recipe requested by the search method
     if request.method == 'GET':
+        
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
             'ingredients':ingredients, 'yield': results.o_yield, 'directions':directions})    
     else: 
@@ -160,9 +161,13 @@ def detail(request, id):
         for i in targs:
             # If the user wants to see metric measurements, this will convert the updated yield
             # amount into metric
-            """ if request.method == 'POST':
-                print(request.POST) """
-            if request.POST['unit_conv'] == 'Metric':
+            unit_conv = "Imperial"
+            try:
+               unit_conv = request.POST['unit_conv']
+            except Exception as e:
+                pass
+
+            if unit_conv == 'Metric':
                 new_yield = request.POST["convert_y"]
                 for i in targs:
                     converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
@@ -189,7 +194,7 @@ def detail(request, id):
 
                 return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
                     'ingredients':ingredients, 'yield': results.o_yield, 'targs':zipped,\
-                    'new_yield':new_yield, 'directions':directions})
+                    'new_yield':new_yield, 'directions':directions, 'metric':1})
             else:    
                 new_yield = request.POST["convert_y"]
                 for i in targs:
