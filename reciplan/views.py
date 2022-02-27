@@ -179,13 +179,21 @@ def detail(request, id):
                 #zip lists into tuples
                 zipped = zip(orig_amt,orig_meas,targ_amt,targ_meas,ingredient_list)
 
-                return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                    'ingredients':ingredients, 'yield': results.o_yield, 'targs':zipped,\
-                    'new_yield':new_yield, 'directions':directions, 'metric':1})
-                                                                        'ingredients':ingredients, \
-                                                                            'yield': results.o_yield, \
-                                                                                'targs':zipped,\
-                                                                                    'new_yield':new_yield})
+                return render(request, 'reciplan/recipe_view.html', 
+                                { 
+                                    'recipe':results, 
+                                    'ingredients':ingredients, 
+                                    'yield': results.o_yield, 
+                                    'targs':zipped,
+                                    'new_yield':new_yield, 
+                                    'directions':directions, 
+                                    'metric':1, 
+                                    'ingredients':ingredients, 
+                                    'yield': results.o_yield, 
+                                    'targs':zipped,
+                                    'new_yield':new_yield
+                                }
+                              )
             else:    
                 new_yield = request.POST["convert_y"]
                 for i in targs:
