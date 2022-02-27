@@ -221,14 +221,3 @@ def detail(request, id):
                                                                                     'yield': results.o_yield, \
                                                                                         'targs':zipped,\
                                                                                             'new_yield':new_yield})
-
-# This should be linked to the checkbox in recipe_view.html
-def cart(request):
-    #results = Recipe.objects.get(id=id)
-    #ingredient = Ingredients.objects.filter(recipe = results)
-    
-    response = render(request, 'reciplan/cart.html')  
-    if request == "POST":
-        response.set_cookie('cart', 'These are the items in the cart')
-
-    return response
