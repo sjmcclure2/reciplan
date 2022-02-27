@@ -2,7 +2,7 @@
 File:       recipe_view.html
 Authors:    Joshua Coe, Scott McClure, Danita Hodges
 Purpose:    Search page for recipes
-Version:    1.6
+Version:    1.7
 Version Notes:
             1.0 - JC - Initial creation, query
             1.1 - SM - Added conversion function and form
@@ -15,6 +15,7 @@ Version Notes:
             1.5 - JC - updated conversion table
                        added conditional for target yield
             1.6 - DH - Page title, started add to cart function
+            1.7 - DH - Fixed directions merge error
 -->
 
 {% extends 'reciplan/base.html'%}
@@ -125,9 +126,8 @@ Version Notes:
               </th>
             </tr>
             {% endfor %}
+          </tbody>
         {% endif %}
-      </tbody>
-
       </table>
     </div>
   </div>
@@ -145,35 +145,15 @@ Version Notes:
         </thead>
         <tbody>
           {% for direction in directions %}
-          <tr>
-            <td>{{ direction.step }}</td>
-            <td>{{ direction.instruction }}</td>
-          </tr>
+            <tr>
+              <td>{{ direction.step }}</td>
+              <td>{{ direction.instruction }}</td>
+            </tr>
           {% endfor %}
         </tbody>
-=======
-                <button id="" class="btn cart btn-success">Add to Cart</button>
-              </th>
-            </tr>
-            {% endfor %}
-          </tbody>
-      {% else %}
-        {% for ingredient in ingredients %}
-        <tr>
-          <td>{{ ingredient.amt }}</td>
-          <td>{{ ingredient.unit_of_measure }}</td>
-          <td> - </td>
-          <td> - </td>
-          <td>{{ ingredient.name }}</td>
-          <th scope="col">
-            <button id="" class="btn cart btn-success">Add to Cart</button>
-          </th>
-        </tr>
-        {% endfor %}
-      {% endif %}
-      </table>
     </div>
   </div>
+
 </div>
 
 <!--Convert imperial to metric-->

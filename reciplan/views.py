@@ -1,7 +1,7 @@
 #File:       views.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define views for ReciPlan app
-##Version:   1.2
+##Version:   1.7
 #Version Notes:
 #            1.0 - JC - Initial creation, initial functions
 #            1.1 - SM - Detail view
@@ -11,9 +11,7 @@
 #            1.4 - JC - Removed targs from GET request for detail view
 #            1.5 - JC - Updated the conversion implementation
 #            1.6 - JC - Updated search algorithm to allow search by ingredient
-
-
-
+#            1.7 - DH - Added directions to if-else renders
 
 from distutils import errors
 from sre_constants import IN
@@ -76,9 +74,6 @@ class RecipeCreate(CreateView):
                     i.step = counter
                     counter += 1
                     i.save()
-                
-
-
         return super(RecipeCreate, self).form_valid(form)
 
     def get_success_url(self):
@@ -193,10 +188,8 @@ def detail(request, id):
                 zipped = zip(orig_amt,orig_meas,targ_amt,targ_meas,ingredient_list)
 
                 return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                        'ingredients':ingredients, \
-                                                                            'yield': results.o_yield, \
-                                                                                'targs':zipped,\
-                                                                                    'new_yield':new_yield})
+                    'ingredients':ingredients, 'yield': results.o_yield, 'targs':zipped,\
+                    'new_yield':new_yield, 'directions':directions})
             else:    
                 new_yield = request.POST["convert_y"]
                 for i in targs:
@@ -221,18 +214,17 @@ def detail(request, id):
                 #zip lists into tuples
                 zipped = zip(orig_amt,orig_meas,targ_amt,targ_meas,ingredient_list)
                 return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                                'ingredients':ingredients, \
-                                                                                    'yield': results.o_yield, \
-                                                                                        'targs':zipped,\
-                                                                                            'new_yield':new_yield})
+                    'ingredients':ingredients, 'yield': results.o_yield, 'targs':zipped,\
+                    'new_yield':new_yield, 'directions':directions})
 
+# Will likely not need this once javascript is done
 # This should be linked to the checkbox in recipe_view.html
-def cart(request):
+#def cart(request):
     #results = Recipe.objects.get(id=id)
     #ingredient = Ingredients.objects.filter(recipe = results)
     
-    response = render(request, 'reciplan/cart.html')  
-    if request == "POST":
-        response.set_cookie('cart', 'These are the items in the cart')
+    #response = render(request, 'reciplan/cart.html')  
+    #if request == "POST":
+        #response.set_cookie('cart', 'These are the items in the cart')
 
-    return response
+    #return response

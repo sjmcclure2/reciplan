@@ -1,11 +1,12 @@
 #File:       forms.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define forms for ReciPlan app
-##Version:   1.2
+##Version:   1.3
 #Version Notes:
 #            1.0 - JC - Initial creation, user creation
 #            1.1 - JC - Ingredients form, create recipe form
 #            1.2 - DH - Directions form, create recipe field order
+#            1.3 - DH - Line spacing changes to recipe creation form
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -48,15 +49,20 @@ class RecipeForm(ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field('title'),
+                HTML("<br>"),
                 Field('description'),
+                HTML("<br>"),
                 Field('o_yield'),
+                HTML("<br>"),
                 Field('image'),
+                HTML("<br>"),
                 Field('url'),
+                HTML("<br>"),
                 Fieldset('Add Ingredients',
                     Formset('Ingredients')),
+                HTML("<br>"),
                 Fieldset('Add Directions',
                     Formset('Directions')),
-                
                 HTML("<br>"),
                 ButtonHolder(Submit('submit', 'save')),
                 )
