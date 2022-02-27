@@ -160,7 +160,7 @@ def detail(request, id):
                     converted = conversions.convert_yield(int(request.POST["convert_y"]), i['unit_of_measure'], i['cup_amt'])
                     i['amt'] = converted[0]
                     i['unit_of_measure'] = converted[1]
-                    metric = conversions.Convert.metric_imperial(converted[0], converted[1])
+                    metric = conversions.Convert.to_metric(converted[0], converted[1])
                     i['amt'] = metric[0]
                     i['unit_of_measure'] = metric[1]
                 #create lists for each needed output

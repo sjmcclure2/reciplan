@@ -84,11 +84,13 @@ class Convert:
         adj_amt = cup_amt * t_yield
         if(unit == "Kg"):
             unit = "lbs"
-            return round(adj_amt, 2), unit
+            return round(adj_amt * 2.20, 2), unit
         elif(unit == "grams"):
             unit = "oz"
-            return round(adj_amt, 2), unit
+            return round(adj_amt/28.35, 2), unit
         # Add lbs and oz to be converted into the proper imperial yield ready for metric conversion
+        else:
+            return round(adj_amt, 2), unit
         
     @staticmethod  
     def to_metric(amt, unit):         

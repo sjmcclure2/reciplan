@@ -32,8 +32,8 @@ class Ingredients(models.Model):
     name = models.CharField(max_length = 50)
     amt = models.FloatField()
     UOM = (
-        ('fl_oz', 'fl oz'),
-        ('fl_cups', 'fl cups'),
+        ('fl_oz', 'fl_oz'),
+        ('fl_cups', 'fl_cups'),
         ('cups', 'cups'),
         ('pints', 'pints'),
         ('quarts', 'quarts'), 
@@ -46,11 +46,7 @@ class Ingredients(models.Model):
         ('lbs', 'lbs'),
         ('mL', 'mL'),
         ('liters', 'liters'),
-        ('ea', 'ea'),
-        ('pinch', 'pinch'),
-        ('hammock', 'hammock'),
-        ('f_ton', 'f ton'),
-        ('metric_f_ton', 'metric f ton')
+        ('ea', 'ea')
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM)
     cup_amt = models.FloatField(null=True)
