@@ -1,2 +1,2 @@
-# Reciplan
-Reciplan is a web app that allows users to create and view recipes. See a recipe that you like but you need to feed an army? Reciplan is prepared. You can convert the yield amount to feed that army. We look out for our metric community as well. Every recipe can be input with either metric or imperial units of measurement. The default view is imperial but can be converted into metric units with the click of a button.
+# ReciPlan
+ReciPlan is a web app that allows users to create and view recipes. See a recipe that you like but you need to feed an army? ReciPlan is prepared. You can convert the yield amount to feed that army. We look out for our metric community as well. Every recipe can be input with either metric or imperial units of measurement. The default view is imperial but can be converted into metric units with the click of a button.
