@@ -11,7 +11,6 @@
 #                       ingredient models. Set URL source to nullable   
 #
 
-from ensurepip import version
 from django.db import models
 from . import conversions
 from django.urls import reverse
@@ -24,7 +23,6 @@ class Recipe(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
     o_yield = models.IntegerField(verbose_name="Yield (servings)")
-    #directions = models.TextField()
     image = models.ImageField(upload_to="reciplan/images/", blank=True)
     url = models.URLField(blank=True, verbose_name="URL Source", null=True)
 
@@ -55,7 +53,6 @@ class Ingredients(models.Model):
     )
     unit_of_measure = models.CharField(max_length=100, choices = UOM, verbose_name="Unit of Measure")
     cup_amt = models.FloatField(null=True)
-
 class Direction(models.Model):
     def __str__(self):
         return '{} - Step {}'.format(self.recipe, self.step)
