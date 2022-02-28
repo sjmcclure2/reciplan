@@ -217,14 +217,8 @@ def detail(request, id):
                     'ingredients':ingredients, 'yield': results.o_yield, 'targs':zipped,\
                     'new_yield':new_yield, 'directions':directions})
 
-# Will likely not need this once javascript is done
-# This should be linked to the checkbox in recipe_view.html
-#def cart(request):
-    #results = Recipe.objects.get(id=id)
-    #ingredient = Ingredients.objects.filter(recipe = results)
-    
-    #response = render(request, 'reciplan/cart.html')  
-    #if request == "POST":
-        #response.set_cookie('cart', 'These are the items in the cart')
+def grocery(request):
+    # if method = post
+    # print to PDF
 
-    #return response
+    return render(request, 'reciplan/grocery_list.html')

@@ -14,7 +14,7 @@ Version Notes:
                        set default value for convert_y
             1.5 - JC - updated conversion table
                        added conditional for target yield
-            1.6 - DH - Page title, started add to cart function
+            1.6 - DH - Page title, started add to list function
             1.7 - DH - Fixed directions merge error
 -->
 
@@ -94,7 +94,7 @@ Version Notes:
             <th scope="col">Target Amt</th>
             <th scope="col">UOM</th>
             <th scope="col">Ingredient</th>
-            <th scope="col"><!--Add to Cart--></th>
+            <th scope="col"><!--Add to List--></th>
           </tr>
         </thead>
         <!--add conditional table fill for converted or original recipe-->
@@ -104,11 +104,11 @@ Version Notes:
             <tr>
               <td>{{ ingredient.0 }}</td>
               <td>{{ ingredient.1 }}</td>
-              <td>{{ ingredient.2 }}</td>
-              <td>{{ ingredient.3 }}</td>
-              <td>{{ ingredient.4 }}</td>
+              <td id="amt{{ ingredient.id }}">{{ ingredient.2 }}</td>
+              <td id="uom{{ ingredient.id }}">{{ ingredient.3 }}</td>
+              <td id="ing{{ ingredient.id }}">{{ ingredient.4 }}</td>
               <th scope="col">
-                <button id="" class="btn atc btn-success">Add to Cart</button>
+                <button id="{{ ingredient.id }}" class="btn atl btn-success">Add to List</button>
               </th>
             </tr>
             {% endfor %}
@@ -116,13 +116,13 @@ Version Notes:
         {% else %}
             {% for ingredient in ingredients %}
             <tr>
-              <td id="amt{{ ingredient.amt }}">{{ ingredient.amt }}</td>
-              <td id="uom{{ ingredient.unit_of_measure }}">{{ ingredient.unit_of_measure }}</td>
+              <td id="amt{{ ingredient.id }}">{{ ingredient.amt }}</td>
+              <td id="uom{{ ingredient.id }}">{{ ingredient.unit_of_measure }}</td>
               <td> - </td>
               <td> - </td>
-              <td id="ing{{ ingredient.name }}">{{ ingredient.name }}</td>
+              <td id="ing{{ ingredient.id }}">{{ ingredient.name }}</td>
               <th scope="col">
-                <button id="" class="btn atc btn-success">Add to Cart</button>
+                <button id="{{ ingredient.id }}" class="btn atl btn-success">Add to List</button>
               </th>
             </tr>
             {% endfor %}
@@ -172,31 +172,35 @@ Version Notes:
 
 <!--Add items to shopping list-->
 <script type="text/javascript">
-  console.log('This is working');
+  console.log('Recipe view page is working');
 
-  if(localStorage.getItem('cart')==null){
-    var cart = {};
+  if(localStorage.getItem('grocery_list')==null){
+    var grocery_list = {};
+    console.log('Grocery list stored');
   }else{
-    cart = JSON.parse(localStorage.getItem('cart'));
+    grocery_list = JSON.parse(localStorage.getItem('grocery_list'));
+    console.log('Grocery list started');
   }// end if else
   
-  $(document).on('click', '.atc', function(){
-    console.log("The add to cart button is clicked.");
+  $(document).on('click', '.atl', function(){
+    console.log("The add to grocery list button is clicked.");
     var item_id = this.id.toString();
     console.log(item_id);
 
-    if(cart[item_id] != undefined){
-      amount = cart[item_id][0] + parseFloat(document.getElementById("amt" + item_id).innerHTML);
-      cart[item_id][0] = amount;
+    if(grocery_list[item_id] != undefined){
+      amount = grocery_list[item_id][0] + parseFloat(document.getElementById("amt" + item_id).innerHTML);
+      grocery_list[item_id][0] = amount;
+
     }else{
       amount = parseFloat(document.getElementById("amt" + item_id).innerHTML);
       uom = document.getElementById("uom" + item_id).innerHTML;
       ingredient = document.getElementById("ing" + item_id).innerHTML;
-      cart[item_id] = [amount, uom, ingredient];
+      grocery_list[item_id] = [amount, uom, ingredient];
     }// end if-else
-      console.log(cart);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.getElementById("cart").innerHTML = "Cart (" + Object.keys(cart).length + ")";
+
+      console.log(grocery_list);
+      localStorage.setItem('grocery_list', JSON.stringify(grocery_list));
+      //document.getElementById("grocery_list").innerHTML = "Grocery List (" + Object.keys(grocery_list).length + ")";
   });
   
 </script>
