@@ -1,21 +1,22 @@
 #File:       views.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define views for ReciPlan app
-##Version:   1.2
+#Version:   1.7
 #Version Notes:
 #            1.0 - JC - Initial creation, initial functions
 #            1.1 - SM - Detail view
 #            1.2 - DH - Modified search view to 8
+#            1.3 - JC - Removed targs from GET request for detail view
+#            1.4 - DH - Added directions form   
 #            1.4 - JC - Removed targs from GET request for detail view
 #            1.5 - JC - Updated the conversion implementation
 #            1.6 - JC - Updated search algorithm to allow search by ingredient
-
-
+#            1.7 - DH - Added directions to if-else renders
 
 from distutils import errors
 from sre_constants import IN
 from django.shortcuts import render, redirect
-from .models import Recipe, Ingredients
+from .models import Recipe, Ingredients, Direction
 from django.contrib.auth import login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -43,14 +44,17 @@ class RecipeCreate(CreateView):
         data = super(RecipeCreate, self).get_context_data(**kwargs)
         if self.request.POST:
             data['Ingredients'] = IngredientsFormSet(self.request.POST)
+            data['Directions'] = DirectionsFormSet(self.request.POST)
         else:
             data['Ingredients'] = IngredientsFormSet()
+            data['Directions'] = DirectionsFormSet()
         return data
 
     def form_valid(self, form):
         #print('in valid')
         context = self.get_context_data()
         ingredients = context['Ingredients']
+        directions = context['Directions']
         with transaction.atomic():
             self.object = form.save()
             if ingredients.is_valid():
@@ -60,6 +64,15 @@ class RecipeCreate(CreateView):
                     i.cup_amt = \
                         conversions.Convert.to_cups(self.object.o_yield, \
                             i.unit_of_measure, i.amt)
+                    i.save()
+            if directions.is_valid():
+                directions.instance = self.object
+                new_direction = directions.save(commit=False)
+                counter = 1
+                for i in new_direction:
+                    print(i)
+                    i.step = counter
+                    counter += 1
                     i.save()
         return super(RecipeCreate, self).form_valid(form)
 
@@ -135,13 +148,13 @@ def detail(request, id):
 
     results = Recipe.objects.get(id=id)
     ingredients = Ingredients.objects.filter(recipe = results)
+    directions = Direction.objects.filter(recipe = results)
 
     # Shows the recipe requested by the search method
     if request.method == 'GET':
-        
         return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                'ingredients':ingredients, \
-                                                                    'yield': results.o_yield})    
+            'ingredients':ingredients, 'yield': results.o_yield, 'directions':directions}) 
+
     else: 
         targs = Ingredients.objects.filter(recipe = results).values('name', 'amt', 'unit_of_measure', 'cup_amt')
 
@@ -225,4 +238,3 @@ def grocery(request):
     # print to PDF
 
     return render(request, 'reciplan/grocery_list.html')
-
