@@ -1,9 +1,10 @@
 #File:       urls.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define url paths for ReciPlan app
-##Version:   1.2
+##Version:   1.1
 #Version Notes:
 #            1.0 - JC - Initial creation
+#            1.1 - DH - Grocery list path
 
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
@@ -18,4 +19,5 @@ urlpatterns = [
     path("search/", views.search, name="search"),
     path("recipe/(?<id>\*)", views.detail, name="detail"),
     path("reciplan/home", views.home, name='home'),
+    path('grocery_list/', views.grocery, name='grocery'),
 ]

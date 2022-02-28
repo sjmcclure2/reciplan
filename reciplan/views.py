@@ -217,7 +217,12 @@ def detail(request, id):
                 #zip lists into tuples
                 zipped = zip(orig_amt,orig_meas,targ_amt,targ_meas,ingredient_list)
                 return render(request, 'reciplan/recipe_view.html', {'recipe':results, \
-                                                                                'ingredients':ingredients, \
-                                                                                    'yield': results.o_yield, \
-                                                                                        'targs':zipped,\
-                                                                                            'new_yield':new_yield})
+                    'ingredients':ingredients, 'yield': results.o_yield, 'targs':zipped,\
+                    'new_yield':new_yield, 'directions':directions})
+
+def grocery(request):
+    # if method = post
+    # print to PDF
+
+    return render(request, 'reciplan/grocery_list.html')
+
