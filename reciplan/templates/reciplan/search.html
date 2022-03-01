@@ -13,6 +13,8 @@ Version Notes:
             1.5 - DH - Added search dropdown
             1.6 - JC - Changed search dropdown to select list
                        Added my-list css class
+            1.7 - JC - removed previous changes in dropdown
+                       added in search for both ingredient and title functionality
 -->
 
 <!-- Additional styling -->
@@ -52,30 +54,7 @@ Version Notes:
                             {% csrf_token %}
                             <input type="search" name='name' placeholder="Search" class="form-control form-control-borderless"/>
                         </div>
-                        <!--New Selector Begin-->
-                        <div class="col-md-2 ">
-                                <select class="my-select" id="search_category" name="search_category">
-                                <option>Recipe Title</option>
-                                <option>Ingredients</option>
-                                </select>
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-success" type="submit">Search</button>
-                        </div>
-                        <!--New Selector End-->
-                        <!--Old Selector Being-->  
-                        <!-- <div class="col-md-2">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                  Looking for...
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                  <li><a class="dropdown-item" href="#">Recipes</a></li>
-                                  <li><a class="dropdown-item" href="#">Ingredients</a></li>
-                                </ul>
-                            </div>
-                        </div> --> 
-                        <!--Old Selector Being-->                         
+                                               
                     </div>
                 </form>
             </div>
