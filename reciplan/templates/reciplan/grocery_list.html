@@ -2,12 +2,36 @@
 File:       grocery_list.html
 Authors:    Danita Hodges
 Purpose:    Grocery list for ingredients
-Version:    1.0
+
+Version:    1.1
 Version Notes:
             1.0 - DH - Initial creation, display message when cart is empty
+            1.1 - DH - Grocery list population and clearing
 -->
 {% extends 'reciplan/base.html'%}
 {% block content %}
+
+
+<title>ReciPlan | Grocery List</title>
+
+<style>
+    #block{
+      padding-top: 2%;
+    }
+</style>
+
+<div class="container" id="block">
+    <div class="row">
+        <div class="col-md-6" id="clearbtn">
+            <!-- Button to clear grocery list -->
+        </div>
+        <div>  
+            <!-- Form to send grocery list to print -->
+            <form method="POST">
+
+            </form>
+        </div>
+    </div>
 
 <div class="container">
     <div class="row">
@@ -18,37 +42,39 @@ Version Notes:
             </ul>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Form to send grocery list to print -->
-            <form method="POST">
 
-            </form>
-        </div>
-    </div>
+    
 </div>
 
 <script type="text/javascript">
+    
     console.log('Grocery List page is working');
 
-    if(localStorage.getItem('grocery_list')==null){
+    // If no items are in the grocery list, start the grocery list object
+    if(localStorage.getItem('grocery_list') == null || localStorage.getItem('grocery_list').length < 3){
 
         EmptyCartMessage();
 
-        var grocery_list = {};
-        console.log('Grocery list stored');
+        var grocery_list = [];
+        console.log('Grocery list started');
     }else{
         grocery_list = JSON.parse(localStorage.getItem('grocery_list'));
-        console.log('Grocery list started');
+        console.log('Grocery list stored');
+
+        clear = `<button class="btn btn-warning">Clear Grocery List</button>`;
+        $('#clearbtn').append(clear);
+
     }// end if else
 
+    // Populate page with stored grocery list
     for(item in grocery_list){
-        let name = grocery_list[item][2];
         let amount = grocery_list[item][0];
         let uom = grocery_list[item][1];
+        let ingredient = grocery_list[item][2];
 
-        itemString = `<li class="list-group-item d-flex justify-content-between align-items-center">{amount} {uom} {name}</li>`
+        itemString = `<li class="list-group-item d-flex justify-content-between align-items-center">${amount} ${uom} - ${ingredient}</li>`;
         $('#item_list').append(itemString);
+
     }// end for
 
     $('#items').val(JSON.stringify(grocery_list));
@@ -58,6 +84,18 @@ Version Notes:
         var message = "Your grocery list is empty.";
         document.getElementById("empty").innerHTML = message;
     }
+
+
+    // Clear grocery list when button is clicked
+    $(document).on('click', '#clearbtn', function(){
+        console.log("Clear button is clicked");
+
+        grocery_list.length = 0;
+        console.log(grocery_list);
+        localStorage.setItem('grocery_list', JSON.stringify(grocery_list));
+        location.reload();
+
+    });
 
 </script>
 

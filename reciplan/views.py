@@ -1,7 +1,7 @@
 #File:       views.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define views for ReciPlan app
-#Version:   1.7
+#Version:   1.9
 #Version Notes:
 #            1.0 - JC - Initial creation, initial functions
 #            1.1 - SM - Detail view
@@ -13,6 +13,7 @@
 #            1.6 - JC - Updated search algorithm to allow search by ingredient
 #            1.7 - DH - Added directions to if-else renders
 #            1.8 - JC - Updated search algorith to search both ingredients and titles
+#            1.9 - DH - Change password view started
 
 from distutils import errors
 from sre_constants import IN
@@ -27,6 +28,9 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.forms.models import model_to_dict
 from . import conversions
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 def index(request):
     #redirect user to login page as first page of the site
@@ -233,4 +237,8 @@ def grocery(request):
     # if method = post
     # print to PDF
 
+
     return render(request, 'reciplan/grocery_list.html')
+
+def change_password(request):
+    return render()

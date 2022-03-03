@@ -2,7 +2,7 @@
 File:       recipe_view.html
 Authors:    Joshua Coe, Scott McClure, Danita Hodges
 Purpose:    Search page for recipes
-Version:    1.8
+Version:    1.9
 Version Notes:
             1.0 - JC - Initial creation, query
             1.1 - SM - Added conversion function and form
@@ -17,6 +17,7 @@ Version Notes:
             1.6 - DH - Page title, started add to list function
             1.7 - DH - Fixed directions merge error
             1.8 - JC - Checkbox for conversions, removed JS and button for same
+            1.9 - DH - Grocery list function
 -->
 
 {% extends 'reciplan/base.html'%}
@@ -24,7 +25,7 @@ Version Notes:
 
 <style>
     #block{
-      padding-left: 3%;
+      padding-top: 2%;
     }
 </style>
 
@@ -35,7 +36,7 @@ Version Notes:
     <div class="col-md-6">
       <div class="row">
         <div class="col-md-12">
-          <img src="/media/{{ recipe.image }}" width="500px"/>
+          <img src="/media/{{ recipe.image }}" height="300px"/>
         </div>
       </div>
     </div>
@@ -86,6 +87,11 @@ Version Notes:
           </form>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-6 offset-1">
+          <button id="" class="btn atl btn-success">Add Ingredients to Grocery List</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -100,37 +106,32 @@ Version Notes:
             <th scope="col">Target Amt</th>
             <th scope="col">UOM</th>
             <th scope="col">Ingredient</th>
-            <th scope="col"><!--Add to List--></th>
           </tr>
         </thead>
         <!--add conditional table fill for converted or original recipe-->
         {% if targs%}
           <tbody>
             {% for ingredient in targs %}
-            <tr>
-              <td>{{ ingredient.0 }}</td>
-              <td>{{ ingredient.1 }}</td>
-              <td id="amt{{ ingredient.id }}">{{ ingredient.2 }}</td>
-              <td id="uom{{ ingredient.id }}">{{ ingredient.3 }}</td>
-              <td id="ing{{ ingredient.id }}">{{ ingredient.4 }}</td>
-              <th scope="col">
-                <button id="{{ ingredient.id }}" class="btn atl btn-success">Add to List</button>
-              </th>
-            </tr>
+
+              <tr>
+                <td>{{ ingredient.0 }}</td>
+                <td>{{ ingredient.1 }}</td>
+                <td>{{ ingredient.2 }}</td>
+                <td>{{ ingredient.3 }}</td>
+                <td>{{ ingredient.4 }}</td>
+              </tr>
             {% endfor %}
 
         {% else %}
             {% for ingredient in ingredients %}
-            <tr>
-              <td id="amt{{ ingredient.id }}">{{ ingredient.amt }}</td>
-              <td id="uom{{ ingredient.id }}">{{ ingredient.unit_of_measure }}</td>
-              <td id="target_amt"> - </td>
-              <td id="target_UOM"> - </td>
-              <td id="ing{{ ingredient.id }}">{{ ingredient.name }}</td>
-              <th scope="col">
-                <button id="{{ ingredient.id }}" class="btn atl btn-success">Add to List</button>
-              </th>
-            </tr>
+
+              <tr>
+                <td>{{ ingredient.amt }}</td>
+                <td>{{ ingredient.unit_of_measure }}</td>
+                <td> - </td>
+                <td> - </td>
+                <td>{{ ingredient.name }}</td>
+              </tr>
             {% endfor %}
           </tbody>
         {% endif %}
@@ -164,37 +165,77 @@ Version Notes:
 
 <!--Add items to shopping list-->
 <script type="text/javascript">
-  console.log('Recipe view page is working');
 
+  
+  // Test if page is working
+  //console.log('Recipe view page is working');
+
+  // Start grocery list object if not existing
   if(localStorage.getItem('grocery_list')==null){
-    var grocery_list = {};
-    console.log('Grocery list stored');
+    var grocery_list = [];
+    console.log('Grocery list started');
   }else{
     grocery_list = JSON.parse(localStorage.getItem('grocery_list'));
-    console.log('Grocery list started');
+    console.log('Grocery list stored');
   }// end if else
-  
+
+  // Add items to grocery list when button is clicked
   $(document).on('click', '.atl', function(){
-    console.log("The add to grocery list button is clicked.");
-    var item_id = this.id.toString();
-    console.log(item_id);
 
-    if(grocery_list[item_id] != undefined){
-      amount = grocery_list[item_id][0] + parseFloat(document.getElementById("amt" + item_id).innerHTML);
-      grocery_list[item_id][0] = amount;
+    console.log("Add button is clicked");
 
-    }else{
-      amount = parseFloat(document.getElementById("amt" + item_id).innerHTML);
-      uom = document.getElementById("uom" + item_id).innerHTML;
-      ingredient = document.getElementById("ing" + item_id).innerHTML;
-      grocery_list[item_id] = [amount, uom, ingredient];
-    }// end if-else
+    var table = document.getElementById("ingredient_table");
 
-      console.log(grocery_list);
-      localStorage.setItem('grocery_list', JSON.stringify(grocery_list));
-      //document.getElementById("grocery_list").innerHTML = "Grocery List (" + Object.keys(grocery_list).length + ")";
+    // Loop through table
+    for (var r = 1, n = table.rows.length; r < n; r++) {
+      for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+        
+        //alert(table.rows[r].cells[c].innerHTML);
+
+        // Populate grocery list
+
+        // Grab first two columns if recipe has not been converted
+        if(table.rows[1].cells[2].innerHTML == " - "){
+         
+          //console.log("table has not been converted");
+
+          if(c == 0){
+            var amount = table.rows[r].cells[c].innerHTML;
+            //console.log("AMT = " + amount);
+          }else if(c == 1){
+            var uom = table.rows[r].cells[c].innerHTML;
+            //console.log("UOM = " + uom)
+          }else if(c == 4){
+            var ingredient = table.rows[r].cells[c].innerHTML;
+            //console.log("ING = " + ingredient);
+          }// end if-else
+
+        }else{
+        // Grab middle columns if table has been converted
+          if(c == 2){
+            var amount = table.rows[r].cells[c].innerHTML;
+            //console.log("AMT = " + amount);
+          }else if(c == 3){
+            var uom = table.rows[r].cells[c].innerHTML;
+            //console.log("UOM = " + uom)
+          }else if(c == 4){
+            var ingredient = table.rows[r].cells[c].innerHTML;
+            //console.log("ING = " + ingredient);
+          }// end if-else
+          
+        }// end if-else
+
+      }// end for
+
+      grocery_list.push([amount, uom, ingredient]);
+
+    }// end for
+
+    console.log(grocery_list);
+    localStorage.setItem('grocery_list', JSON.stringify(grocery_list));
+
   });
-  
+
 </script>
 
 {% endblock %}

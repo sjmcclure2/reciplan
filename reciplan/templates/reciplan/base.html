@@ -9,6 +9,7 @@ Version Notes:
             1.2 - DH - Made nav bar show on default, but collapsable
             1.3 - DH - Fixed errors from merge error
             1.4 - DH - Grocery list link
+            1.5 - DH - Changed vertical nav bar to vertical, updated formatting
 -->
 
 {% load static %}
@@ -35,102 +36,86 @@ Version Notes:
 
 <link rel="stylesheet" type="text/css" href="{% static 'admin/css/navbar.css' %}"/>
 
-<div class="container">
-    <!--Main nav bar start-->
-    <nav
-        {% if user.is_superuser %}
-        class="navbar navbar-light bg-warning bg-gradient fixed-top"
-        {% elif user.is_staff or user.is_authenticated %}
-        class="navbar navbar-light bg-success bg-gradient fixed-top"
-        {% else %}
-        class="navbar navbar-light bg-primary bg-gradient fixed-top"
-        {% endif %}
-        >  
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-                <h2>ReciPlan</h2>
+<!--Main nav bar start-->
+<!--Change navbar color based on user role-->
+<nav
+    {% if user.is_superuser %}
+        class="navbar navbar-expand-lg navbar-light bg-gradient bg-warning"
+    {% elif user.is_staff or user.is_authenticated %}
+        class="navbar navbar-expand-lg navbar-light bg-gradient bg-success"
+    {% else %}
+        class="navbar navbar-expand-lg navbar-light bg-gradient bg-primary"
+    {% endif %}
+    >
+    <div class="container-fluid">
+        <h3 class="navbar-brand" id="user_role">
+            {% if user.is_superuser %}
+                Admin: {{ request.user }} |
+            {% elif user.is_staff or user.is_authenticated %}
+                User: {{ request.user }} |
+            {% else %}
+                Guest |
+            {% endif %}
+        </h3>
+      
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!--Display certain links if authenticated-->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'search' %}">Search</a>
+                </li>
+                {% if user.is_superuser or user.is_staff or user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create' %}">Create Recipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'grocery' %}">Grocery List</a>
+                    </li>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+                    </li>
+                {% elif user.is_staff or user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'changepw' %}">Change Password</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Create Account</a>
+                    </li>
+                {% endif %}
+
+                {% if user.is_superuser or user.is_staff or user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Sign Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <!--Display role and user name-->
+            <a class="navbar-brand d-flex" href="{% url 'home' %}">
+                <img src="/media/reciplan/images/logo-small.png" />
             </a>
 
-            <!--Change navbar color based on user role-->
-            <div 
-                {% if user.is_superuser %}
-                    class="offcanvas show offcanvas-start bg-warning bg-gradient"
-                {% elif user.is_staff or user.is_authenticated %}
-                    class="offcanvas show offcanvas-start bg-success bg-gradient"
-                {% else %}
-                    class="offcanvas show offcanvas-start bg-primary bg-gradient"
-                {% endif %}
-                    tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-scroll="true" data-bs-backdrop="false">
-                <!-- Display role and user name -->
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
-                        {% if user.is_superuser %}
-                            Admin: {{ request.user }}
-                        {% elif user.is_staff or user.is_authenticated %}
-                            User: {{ request.user }}
-                        {% else %}
-                            Guest
-                        {% endif %}
-                    </h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                
-                <!--Display certain links if authenticated-->
-                <div class="offcanvas-body">
-                    <hr>
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'search' %}">Search Recipes</a>
-                        </li>
-                        {% if user.is_superuser or user.is_staff or user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'create' %}">Create Recipe</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'grocery' %}">Grocery List</a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                    <hr>
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        {% if user.is_superuser %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
-                        </li>
-                        {% elif user.is_staff or user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Change Password</a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Create Account</a>
-                        </li>
-                        {% endif %}
-                        {% if user.is_superuser or user.is_staff or user.is_authenticated %}
-                        <li>
-                            <a class="nav-link" href="{% url 'logout' %}">Sign Out</a>
-                        </li>
-                        {% else %}
-                        <li>
-                            <a class="nav-link" href="{% url 'login' %}">Sign In</a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
 
-            </div>
+            <!-- Optional search bar across all pages
+            <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>-->
         </div>
-    </nav>
-</div>
-    <!--Main nav bar end-->
+    </div>
+</nav>
+<!--Main nav bar end-->
 
-    <!--Page content-->
+<!--Page content-->
 <div class="container">
     <div class="row">
         <div class="col">
