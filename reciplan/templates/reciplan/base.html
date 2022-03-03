@@ -88,6 +88,7 @@ Version Notes:
                         <a class="nav-link" href="{% url 'register' %}">Create Account</a>
                     </li>
                 {% endif %}
+
                 {% if user.is_superuser or user.is_staff or user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Sign Out</a>
@@ -102,6 +103,7 @@ Version Notes:
             <a class="navbar-brand d-flex" href="{% url 'home' %}">
                 <img src="/media/reciplan/images/logo-small.png" />
             </a>
+
 
             <!-- Optional search bar across all pages
             <form class="d-flex">

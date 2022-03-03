@@ -7,6 +7,7 @@
 #            1.1 - DH - Grocery list path
 #            1.2 - DH - Change password path
 
+
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from . import views
@@ -22,4 +23,5 @@ urlpatterns = [
     path("reciplan/home", views.home, name='home'),
     path('grocery_list/', views.grocery, name='grocery'),
     path('change_password/', views.change_password, name='change_password'),
+
 ]

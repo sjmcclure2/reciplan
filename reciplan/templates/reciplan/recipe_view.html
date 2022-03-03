@@ -112,6 +112,7 @@ Version Notes:
         {% if targs%}
           <tbody>
             {% for ingredient in targs %}
+
               <tr>
                 <td>{{ ingredient.0 }}</td>
                 <td>{{ ingredient.1 }}</td>
@@ -123,6 +124,7 @@ Version Notes:
 
         {% else %}
             {% for ingredient in ingredients %}
+
               <tr>
                 <td>{{ ingredient.amt }}</td>
                 <td>{{ ingredient.unit_of_measure }}</td>
@@ -163,6 +165,7 @@ Version Notes:
 
 <!--Add items to shopping list-->
 <script type="text/javascript">
+
   
   // Test if page is working
   //console.log('Recipe view page is working');

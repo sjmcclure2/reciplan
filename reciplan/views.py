@@ -1,7 +1,7 @@
 #File:       views.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define views for ReciPlan app
-#Version:   1.8
+#Version:   1.9
 #Version Notes:
 #            1.0 - JC - Initial creation, initial functions
 #            1.1 - SM - Detail view
@@ -12,7 +12,8 @@
 #            1.5 - JC - Updated the conversion implementation
 #            1.6 - JC - Updated search algorithm to allow search by ingredient
 #            1.7 - DH - Added directions to if-else renders
-#            1.8 - DH - Change password view started
+#            1.8 - JC - Updated search algorith to search both ingredients and titles
+#            1.9 - DH - Change password view started
 
 from distutils import errors
 from sre_constants import IN
@@ -125,23 +126,18 @@ def search(request):
     if request.method == "POST":
         query_name = request.POST.get('name')
         if query_name:
-            if request.POST.get('search_category') == 'Recipe Title':
-                #query the DB for recipes with a title containing the search term
-                results = Recipe.objects.filter(title__icontains=query_name)
-            elif request.POST.get('search_category') == 'Ingredients':
-                #query the DB for ingredients that match the query name
-                ingredients = Ingredients.objects.filter(name__contains=query_name)
-                names = []
-                #get all recipe names containg the ingredient
-                for i in ingredients:
-                    names.append(i.recipe)
-                results = []
-                #get all recipe objects in query sets
-                for j in names:
-                    set = Recipe.objects.filter(title=j)
-                    #add each recipe from the query set into the list
-                    for k in set:
-                        results.append(k)
+            #create the results array
+            results = []
+            #query the DB for ingredients that match the query name
+            ingredients = Ingredients.objects.filter(name__contains=query_name)
+            #add all recipes containing ingredients to the results
+            for i in ingredients:
+                results.append(i.recipe)
+            #find recipes with a title containing the query name
+            titles = Recipe.objects.filter(title__icontains=query_name)
+            #add recipes from the title search to the results
+            for L in titles:
+                results.append(L)
             #return the search template with the required variables for the display
             return render(request, 'reciplan/search.html', {"results":results, "query":query_name, 'recipes':recipes})
     #if there are no results display all available recipes in a list.
@@ -240,6 +236,7 @@ def detail(request, id):
 def grocery(request):
     # if method = post
     # print to PDF
+
 
     return render(request, 'reciplan/grocery_list.html')
 

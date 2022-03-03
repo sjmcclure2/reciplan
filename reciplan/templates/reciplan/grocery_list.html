@@ -2,6 +2,7 @@
 File:       grocery_list.html
 Authors:    Danita Hodges
 Purpose:    Grocery list for ingredients
+
 Version:    1.1
 Version Notes:
             1.0 - DH - Initial creation, display message when cart is empty
@@ -9,6 +10,7 @@ Version Notes:
 -->
 {% extends 'reciplan/base.html'%}
 {% block content %}
+
 
 <title>ReciPlan | Grocery List</title>
 
@@ -31,6 +33,7 @@ Version Notes:
         </div>
     </div>
 
+<div class="container">
     <div class="row">
         <div class="col-md-12">
             <h2 id="empty"></h2>
@@ -39,6 +42,7 @@ Version Notes:
             </ul>
         </div>
     </div>
+
     
 </div>
 
@@ -80,6 +84,7 @@ Version Notes:
         var message = "Your grocery list is empty.";
         document.getElementById("empty").innerHTML = message;
     }
+
 
     // Clear grocery list when button is clicked
     $(document).on('click', '#clearbtn', function(){
