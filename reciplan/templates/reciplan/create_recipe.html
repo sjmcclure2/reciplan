@@ -6,18 +6,25 @@ Version:    1.1
 Version Notes:
             1.0 - JC - Initial creation, dummy draft
             1.1 - DH - Page title
+            1.2 - DH - Styling
 -->
 
 {% extends "reciplan/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
+<style>
+    #create{
+        padding-top: 2%;
+    }
+</style>
+
 <title>ReciPlan | Create Recipe</title>
 
-<div class="container">
+<div class="container" id="create">
     <div class="card">
         <div class="card-header">
-            Create Recipe
+            <h2>Create Recipe</h2>
         </div>
         <div class="card-body">
              {% crispy form %}

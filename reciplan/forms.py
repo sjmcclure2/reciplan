@@ -7,7 +7,9 @@
 #            1.1 - JC - Ingredients form, create recipe form
 #            1.2 - DH - Directions form, create recipe field order
 #            1.3 - DH - Line spacing changes to recipe creation form
+#            1.4 - DH - Modified recipe creation form for input field width
 
+from tkinter.ttk import Style
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -48,15 +50,15 @@ class RecipeForm(ModelForm):
         self.helper.field_class = 'col-md-9'
         self.helper.layout = Layout(
             Div(
-                Field('title'),
+                Field('title', style='width: 50%'),
                 HTML("<br>"),
-                Field('description'),
+                Field('description', style='width: 50%'),
                 HTML("<br>"),
-                Field('o_yield'),
+                Field('o_yield', style='width: 5%'),
                 HTML("<br>"),
                 Field('image'),
                 HTML("<br>"),
-                Field('url'),
+                Field('url', style='width: 50%'),
                 HTML("<br>"),
                 Fieldset('Add Ingredients',
                     Formset('Ingredients')),
@@ -64,7 +66,7 @@ class RecipeForm(ModelForm):
                 Fieldset('Add Directions',
                     Formset('Directions')),
                 HTML("<br>"),
-                ButtonHolder(Submit('submit', 'save')),
+                ButtonHolder(Submit('submit', 'Save')),
                 )
             )
 
