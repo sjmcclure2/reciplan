@@ -2,7 +2,7 @@
 File:       base.html
 Authors:    Joshua Coe, Danita Hodges
 Purpose:    Navigation bar displayed across all but login page
-Version:    1.4
+Version:    1.6
 Version Notes:
             1.0 - JC - Initial creation, nav bar draft
             1.1 - DH - Changed nav bar, added dymanic changes based on user role
@@ -10,6 +10,7 @@ Version Notes:
             1.3 - DH - Fixed errors from merge error
             1.4 - DH - Grocery list link
             1.5 - DH - Changed vertical nav bar to vertical, updated formatting
+            1.6 - DH - Change password link
 -->
 
 {% load static %}
@@ -81,11 +82,11 @@ Version Notes:
                     </li>
                 {% elif user.is_staff or user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'changepw' %}">Change Password</a>
+                        <a class="nav-link" href="{% url 'password_reset' %}">Change Password</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Create Account</a>
+                        <a class="nav-link" href="{% url 'create' %}">Create Account</a>
                     </li>
                 {% endif %}
 

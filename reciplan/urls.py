@@ -11,6 +11,7 @@
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from . import views
+from django.contrib.auth import views as view
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -22,6 +23,5 @@ urlpatterns = [
     path("recipe/(?<id>\*)", views.detail, name="detail"),
     path("reciplan/home", views.home, name='home'),
     path('grocery_list/', views.grocery, name='grocery'),
-    path('change_password/', views.change_password, name='change_password'),
-
+    path("password_reset/", login_required(view.PasswordResetView.as_view()), name="password_reset")
 ]

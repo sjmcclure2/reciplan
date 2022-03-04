@@ -14,6 +14,8 @@
 #            1.7 - DH - Added directions to if-else renders
 #            1.8 - JC - Updated search algorith to search both ingredients and titles
 #            1.9 - DH - Change password view started
+#            1.10 - DH - Removed change password view. Grocery print functionc an be
+#                        handled by JavaScript
 
 from distutils import errors
 from sre_constants import IN
@@ -234,11 +236,4 @@ def detail(request, id):
                     'new_yield':new_yield, 'directions':directions})
 
 def grocery(request):
-    # if method = post
-    # print to PDF
-
-
     return render(request, 'reciplan/grocery_list.html')
-
-def change_password(request):
-    return render()
