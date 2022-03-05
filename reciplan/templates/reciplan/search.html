@@ -2,7 +2,7 @@
 File:       search.html
 Authors:    Joshua Coe, Danita Hodges
 Purpose:    Search page for recipes
-Version:    1.9
+Version:    1.10
 Version Notes:
             1.0 - JC - Initial creation, query
             1.1 - DH - Added recipes to database, layout, removed salutation;
@@ -17,6 +17,7 @@ Version Notes:
                        added in search for both ingredient and title functionality
             1.8 - DH - Page title
             1.9 - DH - Added page navigation links for paginator function
+            1.10- JC - Fixed column break bug on positive results return
 -->
 
 <!-- Additional styling -->
@@ -77,7 +78,7 @@ Version Notes:
                 <!--If there are results this will display them in a list-->
                 {% if results %}
                     <h2>Here are recipes containing " {{ query }} "</h2>
-                    <div class="col-md-12">
+                    
                     {% for result in results %}
                         <div class="card" style="width: 18rem;">
                             <img class="card-img-top" src="/media/{{result.image}}" alt="Card image cap">

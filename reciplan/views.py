@@ -17,6 +17,7 @@
 #            1.10 - DH - Removed change password view. Grocery print functionc an be
 #                        handled by JavaScript
 #            1.11 - DH - Added paginator function to allow for more than 8 results to be shown
+#            1.12 - JC - Added paginator to results and negative search results returning
 
 from distutils import errors
 from sre_constants import IN
@@ -141,6 +142,16 @@ def search(request):
             #add recipes from the title search to the results
             for L in titles:
                 results.append(L)
+            #Paginator function allows scrolling through more pages when there are more than 8 results
+            if len(results)>8:
+                paginator = Paginator(results, 8)
+                page = request.GET.get('page')
+                recipes = paginator.get_page(page)
+            else:
+                #Paginator function allows scrolling through more pages when there are more than 8 results
+                paginator = Paginator(recipes, 8)
+                page = request.GET.get('page')
+                recipes = paginator.get_page(page)   
             #return the search template with the required variables for the display
             return render(request, 'reciplan/search.html', {"results":results, "query":query_name, 'recipes':recipes})
     #if there are no results display all available recipes in a list.
