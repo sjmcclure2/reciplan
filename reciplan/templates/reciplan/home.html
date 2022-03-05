@@ -1,8 +1,24 @@
-<!--homepage placeholder-->
+<!--
+File:       home.html
+Authors:    Joshua Coe, Danita Hodges
+Purpose:    Home page seen past the login page
+Version:    1.1
+Version Notes:
+            1.0 - JC - Initial creation
+            1.1 - DH - Added commercial
+-->
 {% extends 'reciplan/base.html'%}
 {% block content %}
 <title>ReciPlan | Home</title>
 
-<h1>This is the splash page.</h1>
-<h2>Please login or create an account to view recipes.</h2>
+<style>
+    #commercial{
+        padding-top: 2%;
+    }
+</style>
+
+<div class="container" id="commercial">
+    <iframe  width="100%" height="400%" src="https://www.youtube.com/embed/_mQMKXdLVSM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 {% endblock%}
