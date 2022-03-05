@@ -23,5 +23,4 @@ urlpatterns = [
     path("recipe/(?<id>\*)", views.detail, name="detail"),
     path("reciplan/home", views.home, name='home'),
     path('grocery_list/', views.grocery, name='grocery'),
-    path("password_reset/", login_required(view.PasswordResetView.as_view()), name="password_reset")
 ]
