@@ -32,10 +32,10 @@ class CustomUserCreationForm(UserCreationForm):
 
 class RecipeForm(ModelForm):
 
-    def clean_title(self):
+    """ def clean_title(self):
         if Recipe.objects.filter(title=self.cleaned_data['title']).exists():
             raise forms.ValidationError("That recipe title already exists, choose another")
-        return self.cleaned_data['title']
+        return self.cleaned_data['title'] """
 
     class Meta:
         model = Recipe

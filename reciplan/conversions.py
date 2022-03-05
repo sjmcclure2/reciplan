@@ -5,30 +5,30 @@ class Convert:
         adj_amt = (amt/o_yield) 
         if unit == "fl_oz":
             cup_amt = adj_amt/8.115
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == "pints":
             cup_amt = adj_amt/0.507
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == "quarts":
             cup_amt = adj_amt/0.254
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == "gallons":
             cup_amt = adj_amt/0.063
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == "tsp":
             cup_amt = adj_amt/48.692
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == "Tbsp":
             cup_amt = adj_amt/16.231
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == 'mL':
             cup_amt = adj_amt/240
-            return round(cup_amt, 2) 
+            return cup_amt 
         elif unit == 'liters':
             cup_amt = adj_amt/0.240
-            return round(cup_amt, 2) 
+            return cup_amt 
         else:
-            return round(adj_amt, 2)
+            return adj_amt
     
     # 1 - 14 mL --> tsp           
     # 15 - 29 mL --> Tbsp  
