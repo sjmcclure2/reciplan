@@ -136,7 +136,9 @@ def search(request):
             ingredients = Ingredients.objects.filter(name__contains=query_name)
             #add all recipes containing ingredients to the results
             for i in ingredients:
-                results.append(i.recipe)
+                rec = i.recipe
+                if not rec in results:
+                    results.append(rec)
             #find recipes with a title containing the query name
             titles = Recipe.objects.filter(title__icontains=query_name)
             #add recipes from the title search to the results
