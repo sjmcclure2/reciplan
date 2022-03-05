@@ -1,7 +1,7 @@
 #File:       views.py
 #Authors:    Joshua Coe, Scott McClure, Danita Hodges
 #Purpose:    Define views for ReciPlan app
-#Version:   1.9
+#Version:   1.11
 #Version Notes:
 #            1.0 - JC - Initial creation, initial functions
 #            1.1 - SM - Detail view
@@ -16,6 +16,7 @@
 #            1.9 - DH - Change password view started
 #            1.10 - DH - Removed change password view. Grocery print functionc an be
 #                        handled by JavaScript
+#            1.11 - DH - Added paginator function to allow for more than 8 results to be shown
 
 from distutils import errors
 from sre_constants import IN
@@ -33,6 +34,7 @@ from . import conversions
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.paginator import Paginator
 
 def index(request):
     #redirect user to login page as first page of the site
@@ -121,8 +123,7 @@ def register(request):
             return redirect(reverse('register'))
     
 def search(request):
-    #get the first 8 recipes from the DB
-    recipes = Recipe.objects.all()[0:8]
+    recipes = Recipe.objects.all().order_by("-id")
 
     #if the method is POST take the form input
     if request.method == "POST":
@@ -143,7 +144,12 @@ def search(request):
             #return the search template with the required variables for the display
             return render(request, 'reciplan/search.html', {"results":results, "query":query_name, 'recipes':recipes})
     #if there are no results display all available recipes in a list.
-    #these might look good as bootstrap cards, currently limited to 8 recipes but can increase
+   
+    #Paginator function allows scrolling through more pages when there are more than 8 results
+    paginator = Paginator(recipes, 8)
+    page = request.GET.get('page')
+    recipes = paginator.get_page(page)
+
     return render(request, 'reciplan/search.html', {'recipes':recipes})
 
 def detail(request, id):

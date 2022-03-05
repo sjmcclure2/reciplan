@@ -2,7 +2,7 @@
 File:       search.html
 Authors:    Joshua Coe, Danita Hodges
 Purpose:    Search page for recipes
-Version:    1.3
+Version:    1.9
 Version Notes:
             1.0 - JC - Initial creation, query
             1.1 - DH - Added recipes to database, layout, removed salutation;
@@ -16,6 +16,7 @@ Version Notes:
             1.7 - JC - removed previous changes in dropdown
                        added in search for both ingredient and title functionality
             1.8 - DH - Page title
+            1.9 - DH - Added page navigation links for paginator function
 -->
 
 <!-- Additional styling -->
@@ -89,7 +90,7 @@ Version Notes:
                     {% endfor %}
                 <!--No results for the word will display the below-->
                 {% else %}
-                    <h2>There are no recipes containing the word {{query}}</h2>
+                    <h2>There are no recipes containing the word " {{query}} "</h2>
                     <!--A no result will display all of the recipes again-->
                     <h2>Here are some other recipes</h2>
                     {% for recipe in recipes %}
@@ -104,7 +105,7 @@ Version Notes:
                     {% endfor %}
                 {% endif %}
             {% else %}
-                <!--this will display eight choices from the DB by default -->
+                <!--this will display eight recent choices from the DB by default -->
                 {% for recipe in recipes %}
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="/media/{{recipe.image}}" alt="Card image cap">
@@ -116,6 +117,22 @@ Version Notes:
                     </div>
                 {% endfor %}
             {% endif %}
+        </div>
+        <div class="row">
+                <div class="col-md-3 offset-md-5">
+                    <ul class="pagination">
+                        {% if recipes.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ recipes.previous_page_number }}">Previous</a></li>
+                        {% endif %}
+
+                        <li class="page-item active"><a class="page-link" href="?page={{ recipes.number }}">{{ product_objects.number }}</a></li>
+                        {% if recipes.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ recipes.next_page_number }}">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ recipes.paginator.num_pages }}">Last</a></li>                            
+                        {% endif %}
+                    </ul>
+                </div>
         </div>
     </div>
 {% endblock %}
