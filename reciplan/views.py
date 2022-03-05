@@ -141,7 +141,8 @@ def search(request):
             titles = Recipe.objects.filter(title__icontains=query_name)
             #add recipes from the title search to the results
             for L in titles:
-                results.append(L)
+                if not L in results:
+                    results.append(L)
             #Paginator function allows scrolling through more pages when there are more than 8 results
             if len(results)>8:
                 paginator = Paginator(results, 8)
